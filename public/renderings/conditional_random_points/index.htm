@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Random point placing patterns | 1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='googlebot' content='noarchive', 'nosnippet'>
+<meta name='robots'    content='noarchive', 'nosnippet'>
+<meta name='description' content='Graphical rendering of mathematical models in python' />
+<meta name='keywords' content='dany shaanan, math, python, rendering, python PIL, mathematics, code' />
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+<link href='/css/style.css' rel='stylesheet' type='text/css'>
+<style>
+
+</style>
+<!-- <script type='text/javascript' src='js/jquery-1.6.2.min.js'></script> -->
+<!-- <script type='text/javascript'></script> -->
+</head>
+
+<body>
+
+<header>
+  <h6><a class='back' href='/'>&lt;&lt; Go Back</a></h6>
+  <h1>Random point placing patterns</h1>
+  <h3>Rendered in Python, explained in English</h3>
+  <h5>By <a href='//danyshaanan.com'>Dany Shaanan</a></h5>
+</header>
+
+<section>
+<h4></h4>
+This is an exercise in random texture creation.
+<br /><br />
+Each image is assigned a 'rule', which is a set of numbers between 0 and 8. Hover an image to see its rule.
+Each image starts white, with a single black pixel in the center,
+then, random pixels are picked, one by one. For each pixel, we check the number of its neighbouring pixels which are already black.
+If that number is in the image rule, we color that random pixel black.
+<br /><br />
+The image below represent all rules, except those which does not include 0 and 1, as those rules could never fill a single pixel.
+Some rules produce the same exact result. (Notice that the random pick of pixels is the same for all images).
+The first two thirds of the images, those that include 0, looks uniform,
+while the third third, those that does not include 0, seems to grow from the center, as new pixels can only be filled next to existing ones,
+and the only existing one at the begining is in the middle of the image.
+<br /><br />
+<a href='conditional_random_points.py'>See the code here</a>
+<br /><br />
+
+<img src='output/012345678.png' title='012345678' width='200px' />
+<img src='output/01234567x.png' title='01234567x' width='200px' />
+<img src='output/0123456x8.png' title='0123456x8' width='200px' />
+<img src='output/0123456xx.png' title='0123456xx' width='200px' />
+<img src='output/012345x78.png' title='012345x78' width='200px' />
+<img src='output/012345x7x.png' title='012345x7x' width='200px' />
+<img src='output/012345xx8.png' title='012345xx8' width='200px' />
+<img src='output/012345xxx.png' title='012345xxx' width='200px' />
+<img src='output/01234x678.png' title='01234x678' width='200px' />
+<img src='output/01234x67x.png' title='01234x67x' width='200px' />
+<img src='output/01234x6x8.png' title='01234x6x8' width='200px' />
+<img src='output/01234x6xx.png' title='01234x6xx' width='200px' />
+<img src='output/01234xx78.png' title='01234xx78' width='200px' />
+<img src='output/01234xx7x.png' title='01234xx7x' width='200px' />
+<img src='output/01234xxx8.png' title='01234xxx8' width='200px' />
+<img src='output/01234xxxx.png' title='01234xxxx' width='200px' />
+<img src='output/0123x5678.png' title='0123x5678' width='200px' />
+<img src='output/0123x567x.png' title='0123x567x' width='200px' />
+<img src='output/0123x56x8.png' title='0123x56x8' width='200px' />
+<img src='output/0123x56xx.png' title='0123x56xx' width='200px' />
+<img src='output/0123x5x78.png' title='0123x5x78' width='200px' />
+<img src='output/0123x5x7x.png' title='0123x5x7x' width='200px' />
+<img src='output/0123x5xx8.png' title='0123x5xx8' width='200px' />
+<img src='output/0123x5xxx.png' title='0123x5xxx' width='200px' />
+<img src='output/0123xx678.png' title='0123xx678' width='200px' />
+<img src='output/0123xx67x.png' title='0123xx67x' width='200px' />
+<img src='output/0123xx6x8.png' title='0123xx6x8' width='200px' />
+<img src='output/0123xx6xx.png' title='0123xx6xx' width='200px' />
+<img src='output/0123xxx78.png' title='0123xxx78' width='200px' />
+<img src='output/0123xxx7x.png' title='0123xxx7x' width='200px' />
+<img src='output/0123xxxx8.png' title='0123xxxx8' width='200px' />
+<img src='output/0123xxxxx.png' title='0123xxxxx' width='200px' />
+<img src='output/012x45678.png' title='012x45678' width='200px' />
+<img src='output/012x4567x.png' title='012x4567x' width='200px' />
+<img src='output/012x456x8.png' title='012x456x8' width='200px' />
+<img src='output/012x456xx.png' title='012x456xx' width='200px' />
+<img src='output/012x45x78.png' title='012x45x78' width='200px' />
+<img src='output/012x45x7x.png' title='012x45x7x' width='200px' />
+<img src='output/012x45xx8.png' title='012x45xx8' width='200px' />
+<img src='output/012x45xxx.png' title='012x45xxx' width='200px' />
+<img src='output/012x4x678.png' title='012x4x678' width='200px' />
+<img src='output/012x4x67x.png' title='012x4x67x' width='200px' />
+<img src='output/012x4x6x8.png' title='012x4x6x8' width='200px' />
+<img src='output/012x4x6xx.png' title='012x4x6xx' width='200px' />
+<img src='output/012x4xx78.png' title='012x4xx78' width='200px' />
+<img src='output/012x4xx7x.png' title='012x4xx7x' width='200px' />
+<img src='output/012x4xxx8.png' title='012x4xxx8' width='200px' />
+<img src='output/012x4xxxx.png' title='012x4xxxx' width='200px' />
+<img src='output/012xx5678.png' title='012xx5678' width='200px' />
+<img src='output/012xx567x.png' title='012xx567x' width='200px' />
+<img src='output/012xx56x8.png' title='012xx56x8' width='200px' />
+<img src='output/012xx56xx.png' title='012xx56xx' width='200px' />
+<img src='output/012xx5x78.png' title='012xx5x78' width='200px' />
+<img src='output/012xx5x7x.png' title='012xx5x7x' width='200px' />
+<img src='output/012xx5xx8.png' title='012xx5xx8' width='200px' />
+<img src='output/012xx5xxx.png' title='012xx5xxx' width='200px' />
+<img src='output/012xxx678.png' title='012xxx678' width='200px' />
+<img src='output/012xxx67x.png' title='012xxx67x' width='200px' />
+<img src='output/012xxx6x8.png' title='012xxx6x8' width='200px' />
+<img src='output/012xxx6xx.png' title='012xxx6xx' width='200px' />
+<img src='output/012xxxx78.png' title='012xxxx78' width='200px' />
+<img src='output/012xxxx7x.png' title='012xxxx7x' width='200px' />
+<img src='output/012xxxxx8.png' title='012xxxxx8' width='200px' />
+<img src='output/012xxxxxx.png' title='012xxxxxx' width='200px' />
+<img src='output/01x345678.png' title='01x345678' width='200px' />
+<img src='output/01x34567x.png' title='01x34567x' width='200px' />
+<img src='output/01x3456x8.png' title='01x3456x8' width='200px' />
+<img src='output/01x3456xx.png' title='01x3456xx' width='200px' />
+<img src='output/01x345x78.png' title='01x345x78' width='200px' />
+<img src='output/01x345x7x.png' title='01x345x7x' width='200px' />
+<img src='output/01x345xx8.png' title='01x345xx8' width='200px' />
+<img src='output/01x345xxx.png' title='01x345xxx' width='200px' />
+<img src='output/01x34x678.png' title='01x34x678' width='200px' />
+<img src='output/01x34x67x.png' title='01x34x67x' width='200px' />
+<img src='output/01x34x6x8.png' title='01x34x6x8' width='200px' />
+<img src='output/01x34x6xx.png' title='01x34x6xx' width='200px' />
+<img src='output/01x34xx78.png' title='01x34xx78' width='200px' />
+<img src='output/01x34xx7x.png' title='01x34xx7x' width='200px' />
+<img src='output/01x34xxx8.png' title='01x34xxx8' width='200px' />
+<img src='output/01x34xxxx.png' title='01x34xxxx' width='200px' />
+<img src='output/01x3x5678.png' title='01x3x5678' width='200px' />
+<img src='output/01x3x567x.png' title='01x3x567x' width='200px' />
+<img src='output/01x3x56x8.png' title='01x3x56x8' width='200px' />
+<img src='output/01x3x56xx.png' title='01x3x56xx' width='200px' />
+<img src='output/01x3x5x78.png' title='01x3x5x78' width='200px' />
+<img src='output/01x3x5x7x.png' title='01x3x5x7x' width='200px' />
+<img src='output/01x3x5xx8.png' title='01x3x5xx8' width='200px' />
+<img src='output/01x3x5xxx.png' title='01x3x5xxx' width='200px' />
+<img src='output/01x3xx678.png' title='01x3xx678' width='200px' />
+<img src='output/01x3xx67x.png' title='01x3xx67x' width='200px' />
+<img src='output/01x3xx6x8.png' title='01x3xx6x8' width='200px' />
+<img src='output/01x3xx6xx.png' title='01x3xx6xx' width='200px' />
+<img src='output/01x3xxx78.png' title='01x3xxx78' width='200px' />
+<img src='output/01x3xxx7x.png' title='01x3xxx7x' width='200px' />
+<img src='output/01x3xxxx8.png' title='01x3xxxx8' width='200px' />
+<img src='output/01x3xxxxx.png' title='01x3xxxxx' width='200px' />
+<img src='output/01xx45678.png' title='01xx45678' width='200px' />
+<img src='output/01xx4567x.png' title='01xx4567x' width='200px' />
+<img src='output/01xx456x8.png' title='01xx456x8' width='200px' />
+<img src='output/01xx456xx.png' title='01xx456xx' width='200px' />
+<img src='output/01xx45x78.png' title='01xx45x78' width='200px' />
+<img src='output/01xx45x7x.png' title='01xx45x7x' width='200px' />
+<img src='output/01xx45xx8.png' title='01xx45xx8' width='200px' />
+<img src='output/01xx45xxx.png' title='01xx45xxx' width='200px' />
+<img src='output/01xx4x678.png' title='01xx4x678' width='200px' />
+<img src='output/01xx4x67x.png' title='01xx4x67x' width='200px' />
+<img src='output/01xx4x6x8.png' title='01xx4x6x8' width='200px' />
+<img src='output/01xx4x6xx.png' title='01xx4x6xx' width='200px' />
+<img src='output/01xx4xx78.png' title='01xx4xx78' width='200px' />
+<img src='output/01xx4xx7x.png' title='01xx4xx7x' width='200px' />
+<img src='output/01xx4xxx8.png' title='01xx4xxx8' width='200px' />
+<img src='output/01xx4xxxx.png' title='01xx4xxxx' width='200px' />
+<img src='output/01xxx5678.png' title='01xxx5678' width='200px' />
+<img src='output/01xxx567x.png' title='01xxx567x' width='200px' />
+<img src='output/01xxx56x8.png' title='01xxx56x8' width='200px' />
+<img src='output/01xxx56xx.png' title='01xxx56xx' width='200px' />
+<img src='output/01xxx5x78.png' title='01xxx5x78' width='200px' />
+<img src='output/01xxx5x7x.png' title='01xxx5x7x' width='200px' />
+<img src='output/01xxx5xx8.png' title='01xxx5xx8' width='200px' />
+<img src='output/01xxx5xxx.png' title='01xxx5xxx' width='200px' />
+<img src='output/01xxxx678.png' title='01xxxx678' width='200px' />
+<img src='output/01xxxx67x.png' title='01xxxx67x' width='200px' />
+<img src='output/01xxxx6x8.png' title='01xxxx6x8' width='200px' />
+<img src='output/01xxxx6xx.png' title='01xxxx6xx' width='200px' />
+<img src='output/01xxxxx78.png' title='01xxxxx78' width='200px' />
+<img src='output/01xxxxx7x.png' title='01xxxxx7x' width='200px' />
+<img src='output/01xxxxxx8.png' title='01xxxxxx8' width='200px' />
+<img src='output/01xxxxxxx.png' title='01xxxxxxx' width='200px' />
+<img src='output/0x2345678.png' title='0x2345678' width='200px' />
+<img src='output/0x234567x.png' title='0x234567x' width='200px' />
+<img src='output/0x23456x8.png' title='0x23456x8' width='200px' />
+<img src='output/0x23456xx.png' title='0x23456xx' width='200px' />
+<img src='output/0x2345x78.png' title='0x2345x78' width='200px' />
+<img src='output/0x2345x7x.png' title='0x2345x7x' width='200px' />
+<img src='output/0x2345xx8.png' title='0x2345xx8' width='200px' />
+<img src='output/0x2345xxx.png' title='0x2345xxx' width='200px' />
+<img src='output/0x234x678.png' title='0x234x678' width='200px' />
+<img src='output/0x234x67x.png' title='0x234x67x' width='200px' />
+<img src='output/0x234x6x8.png' title='0x234x6x8' width='200px' />
+<img src='output/0x234x6xx.png' title='0x234x6xx' width='200px' />
+<img src='output/0x234xx78.png' title='0x234xx78' width='200px' />
+<img src='output/0x234xx7x.png' title='0x234xx7x' width='200px' />
+<img src='output/0x234xxx8.png' title='0x234xxx8' width='200px' />
+<img src='output/0x234xxxx.png' title='0x234xxxx' width='200px' />
+<img src='output/0x23x5678.png' title='0x23x5678' width='200px' />
+<img src='output/0x23x567x.png' title='0x23x567x' width='200px' />
+<img src='output/0x23x56x8.png' title='0x23x56x8' width='200px' />
+<img src='output/0x23x56xx.png' title='0x23x56xx' width='200px' />
+<img src='output/0x23x5x78.png' title='0x23x5x78' width='200px' />
+<img src='output/0x23x5x7x.png' title='0x23x5x7x' width='200px' />
+<img src='output/0x23x5xx8.png' title='0x23x5xx8' width='200px' />
+<img src='output/0x23x5xxx.png' title='0x23x5xxx' width='200px' />
+<img src='output/0x23xx678.png' title='0x23xx678' width='200px' />
+<img src='output/0x23xx67x.png' title='0x23xx67x' width='200px' />
+<img src='output/0x23xx6x8.png' title='0x23xx6x8' width='200px' />
+<img src='output/0x23xx6xx.png' title='0x23xx6xx' width='200px' />
+<img src='output/0x23xxx78.png' title='0x23xxx78' width='200px' />
+<img src='output/0x23xxx7x.png' title='0x23xxx7x' width='200px' />
+<img src='output/0x23xxxx8.png' title='0x23xxxx8' width='200px' />
+<img src='output/0x23xxxxx.png' title='0x23xxxxx' width='200px' />
+<img src='output/0x2x45678.png' title='0x2x45678' width='200px' />
+<img src='output/0x2x4567x.png' title='0x2x4567x' width='200px' />
+<img src='output/0x2x456x8.png' title='0x2x456x8' width='200px' />
+<img src='output/0x2x456xx.png' title='0x2x456xx' width='200px' />
+<img src='output/0x2x45x78.png' title='0x2x45x78' width='200px' />
+<img src='output/0x2x45x7x.png' title='0x2x45x7x' width='200px' />
+<img src='output/0x2x45xx8.png' title='0x2x45xx8' width='200px' />
+<img src='output/0x2x45xxx.png' title='0x2x45xxx' width='200px' />
+<img src='output/0x2x4x678.png' title='0x2x4x678' width='200px' />
+<img src='output/0x2x4x67x.png' title='0x2x4x67x' width='200px' />
+<img src='output/0x2x4x6x8.png' title='0x2x4x6x8' width='200px' />
+<img src='output/0x2x4x6xx.png' title='0x2x4x6xx' width='200px' />
+<img src='output/0x2x4xx78.png' title='0x2x4xx78' width='200px' />
+<img src='output/0x2x4xx7x.png' title='0x2x4xx7x' width='200px' />
+<img src='output/0x2x4xxx8.png' title='0x2x4xxx8' width='200px' />
+<img src='output/0x2x4xxxx.png' title='0x2x4xxxx' width='200px' />
+<img src='output/0x2xx5678.png' title='0x2xx5678' width='200px' />
+<img src='output/0x2xx567x.png' title='0x2xx567x' width='200px' />
+<img src='output/0x2xx56x8.png' title='0x2xx56x8' width='200px' />
+<img src='output/0x2xx56xx.png' title='0x2xx56xx' width='200px' />
+<img src='output/0x2xx5x78.png' title='0x2xx5x78' width='200px' />
+<img src='output/0x2xx5x7x.png' title='0x2xx5x7x' width='200px' />
+<img src='output/0x2xx5xx8.png' title='0x2xx5xx8' width='200px' />
+<img src='output/0x2xx5xxx.png' title='0x2xx5xxx' width='200px' />
+<img src='output/0x2xxx678.png' title='0x2xxx678' width='200px' />
+<img src='output/0x2xxx67x.png' title='0x2xxx67x' width='200px' />
+<img src='output/0x2xxx6x8.png' title='0x2xxx6x8' width='200px' />
+<img src='output/0x2xxx6xx.png' title='0x2xxx6xx' width='200px' />
+<img src='output/0x2xxxx78.png' title='0x2xxxx78' width='200px' />
+<img src='output/0x2xxxx7x.png' title='0x2xxxx7x' width='200px' />
+<img src='output/0x2xxxxx8.png' title='0x2xxxxx8' width='200px' />
+<img src='output/0x2xxxxxx.png' title='0x2xxxxxx' width='200px' />
+<img src='output/0xx345678.png' title='0xx345678' width='200px' />
+<img src='output/0xx34567x.png' title='0xx34567x' width='200px' />
+<img src='output/0xx3456x8.png' title='0xx3456x8' width='200px' />
+<img src='output/0xx3456xx.png' title='0xx3456xx' width='200px' />
+<img src='output/0xx345x78.png' title='0xx345x78' width='200px' />
+<img src='output/0xx345x7x.png' title='0xx345x7x' width='200px' />
+<img src='output/0xx345xx8.png' title='0xx345xx8' width='200px' />
+<img src='output/0xx345xxx.png' title='0xx345xxx' width='200px' />
+<img src='output/0xx34x678.png' title='0xx34x678' width='200px' />
+<img src='output/0xx34x67x.png' title='0xx34x67x' width='200px' />
+<img src='output/0xx34x6x8.png' title='0xx34x6x8' width='200px' />
+<img src='output/0xx34x6xx.png' title='0xx34x6xx' width='200px' />
+<img src='output/0xx34xx78.png' title='0xx34xx78' width='200px' />
+<img src='output/0xx34xx7x.png' title='0xx34xx7x' width='200px' />
+<img src='output/0xx34xxx8.png' title='0xx34xxx8' width='200px' />
+<img src='output/0xx34xxxx.png' title='0xx34xxxx' width='200px' />
+<img src='output/0xx3x5678.png' title='0xx3x5678' width='200px' />
+<img src='output/0xx3x567x.png' title='0xx3x567x' width='200px' />
+<img src='output/0xx3x56x8.png' title='0xx3x56x8' width='200px' />
+<img src='output/0xx3x56xx.png' title='0xx3x56xx' width='200px' />
+<img src='output/0xx3x5x78.png' title='0xx3x5x78' width='200px' />
+<img src='output/0xx3x5x7x.png' title='0xx3x5x7x' width='200px' />
+<img src='output/0xx3x5xx8.png' title='0xx3x5xx8' width='200px' />
+<img src='output/0xx3x5xxx.png' title='0xx3x5xxx' width='200px' />
+<img src='output/0xx3xx678.png' title='0xx3xx678' width='200px' />
+<img src='output/0xx3xx67x.png' title='0xx3xx67x' width='200px' />
+<img src='output/0xx3xx6x8.png' title='0xx3xx6x8' width='200px' />
+<img src='output/0xx3xx6xx.png' title='0xx3xx6xx' width='200px' />
+<img src='output/0xx3xxx78.png' title='0xx3xxx78' width='200px' />
+<img src='output/0xx3xxx7x.png' title='0xx3xxx7x' width='200px' />
+<img src='output/0xx3xxxx8.png' title='0xx3xxxx8' width='200px' />
+<img src='output/0xx3xxxxx.png' title='0xx3xxxxx' width='200px' />
+<img src='output/0xxx45678.png' title='0xxx45678' width='200px' />
+<img src='output/0xxx4567x.png' title='0xxx4567x' width='200px' />
+<img src='output/0xxx456x8.png' title='0xxx456x8' width='200px' />
+<img src='output/0xxx456xx.png' title='0xxx456xx' width='200px' />
+<img src='output/0xxx45x78.png' title='0xxx45x78' width='200px' />
+<img src='output/0xxx45x7x.png' title='0xxx45x7x' width='200px' />
+<img src='output/0xxx45xx8.png' title='0xxx45xx8' width='200px' />
+<img src='output/0xxx45xxx.png' title='0xxx45xxx' width='200px' />
+<img src='output/0xxx4x678.png' title='0xxx4x678' width='200px' />
+<img src='output/0xxx4x67x.png' title='0xxx4x67x' width='200px' />
+<img src='output/0xxx4x6x8.png' title='0xxx4x6x8' width='200px' />
+<img src='output/0xxx4x6xx.png' title='0xxx4x6xx' width='200px' />
+<img src='output/0xxx4xx78.png' title='0xxx4xx78' width='200px' />
+<img src='output/0xxx4xx7x.png' title='0xxx4xx7x' width='200px' />
+<img src='output/0xxx4xxx8.png' title='0xxx4xxx8' width='200px' />
+<img src='output/0xxx4xxxx.png' title='0xxx4xxxx' width='200px' />
+<img src='output/0xxxx5678.png' title='0xxxx5678' width='200px' />
+<img src='output/0xxxx567x.png' title='0xxxx567x' width='200px' />
+<img src='output/0xxxx56x8.png' title='0xxxx56x8' width='200px' />
+<img src='output/0xxxx56xx.png' title='0xxxx56xx' width='200px' />
+<img src='output/0xxxx5x78.png' title='0xxxx5x78' width='200px' />
+<img src='output/0xxxx5x7x.png' title='0xxxx5x7x' width='200px' />
+<img src='output/0xxxx5xx8.png' title='0xxxx5xx8' width='200px' />
+<img src='output/0xxxx5xxx.png' title='0xxxx5xxx' width='200px' />
+<img src='output/0xxxxx678.png' title='0xxxxx678' width='200px' />
+<img src='output/0xxxxx67x.png' title='0xxxxx67x' width='200px' />
+<img src='output/0xxxxx6x8.png' title='0xxxxx6x8' width='200px' />
+<img src='output/0xxxxx6xx.png' title='0xxxxx6xx' width='200px' />
+<img src='output/0xxxxxx78.png' title='0xxxxxx78' width='200px' />
+<img src='output/0xxxxxx7x.png' title='0xxxxxx7x' width='200px' />
+<img src='output/0xxxxxxx8.png' title='0xxxxxxx8' width='200px' />
+<img src='output/0xxxxxxxx.png' title='0xxxxxxxx' width='200px' />
+<img src='output/x12345678.png' title='x12345678' width='200px' />
+<img src='output/x1234567x.png' title='x1234567x' width='200px' />
+<img src='output/x123456x8.png' title='x123456x8' width='200px' />
+<img src='output/x123456xx.png' title='x123456xx' width='200px' />
+<img src='output/x12345x78.png' title='x12345x78' width='200px' />
+<img src='output/x12345x7x.png' title='x12345x7x' width='200px' />
+<img src='output/x12345xx8.png' title='x12345xx8' width='200px' />
+<img src='output/x12345xxx.png' title='x12345xxx' width='200px' />
+<img src='output/x1234x678.png' title='x1234x678' width='200px' />
+<img src='output/x1234x67x.png' title='x1234x67x' width='200px' />
+<img src='output/x1234x6x8.png' title='x1234x6x8' width='200px' />
+<img src='output/x1234x6xx.png' title='x1234x6xx' width='200px' />
+<img src='output/x1234xx78.png' title='x1234xx78' width='200px' />
+<img src='output/x1234xx7x.png' title='x1234xx7x' width='200px' />
+<img src='output/x1234xxx8.png' title='x1234xxx8' width='200px' />
+<img src='output/x1234xxxx.png' title='x1234xxxx' width='200px' />
+<img src='output/x123x5678.png' title='x123x5678' width='200px' />
+<img src='output/x123x567x.png' title='x123x567x' width='200px' />
+<img src='output/x123x56x8.png' title='x123x56x8' width='200px' />
+<img src='output/x123x56xx.png' title='x123x56xx' width='200px' />
+<img src='output/x123x5x78.png' title='x123x5x78' width='200px' />
+<img src='output/x123x5x7x.png' title='x123x5x7x' width='200px' />
+<img src='output/x123x5xx8.png' title='x123x5xx8' width='200px' />
+<img src='output/x123x5xxx.png' title='x123x5xxx' width='200px' />
+<img src='output/x123xx678.png' title='x123xx678' width='200px' />
+<img src='output/x123xx67x.png' title='x123xx67x' width='200px' />
+<img src='output/x123xx6x8.png' title='x123xx6x8' width='200px' />
+<img src='output/x123xx6xx.png' title='x123xx6xx' width='200px' />
+<img src='output/x123xxx78.png' title='x123xxx78' width='200px' />
+<img src='output/x123xxx7x.png' title='x123xxx7x' width='200px' />
+<img src='output/x123xxxx8.png' title='x123xxxx8' width='200px' />
+<img src='output/x123xxxxx.png' title='x123xxxxx' width='200px' />
+<img src='output/x12x45678.png' title='x12x45678' width='200px' />
+<img src='output/x12x4567x.png' title='x12x4567x' width='200px' />
+<img src='output/x12x456x8.png' title='x12x456x8' width='200px' />
+<img src='output/x12x456xx.png' title='x12x456xx' width='200px' />
+<img src='output/x12x45x78.png' title='x12x45x78' width='200px' />
+<img src='output/x12x45x7x.png' title='x12x45x7x' width='200px' />
+<img src='output/x12x45xx8.png' title='x12x45xx8' width='200px' />
+<img src='output/x12x45xxx.png' title='x12x45xxx' width='200px' />
+<img src='output/x12x4x678.png' title='x12x4x678' width='200px' />
+<img src='output/x12x4x67x.png' title='x12x4x67x' width='200px' />
+<img src='output/x12x4x6x8.png' title='x12x4x6x8' width='200px' />
+<img src='output/x12x4x6xx.png' title='x12x4x6xx' width='200px' />
+<img src='output/x12x4xx78.png' title='x12x4xx78' width='200px' />
+<img src='output/x12x4xx7x.png' title='x12x4xx7x' width='200px' />
+<img src='output/x12x4xxx8.png' title='x12x4xxx8' width='200px' />
+<img src='output/x12x4xxxx.png' title='x12x4xxxx' width='200px' />
+<img src='output/x12xx5678.png' title='x12xx5678' width='200px' />
+<img src='output/x12xx567x.png' title='x12xx567x' width='200px' />
+<img src='output/x12xx56x8.png' title='x12xx56x8' width='200px' />
+<img src='output/x12xx56xx.png' title='x12xx56xx' width='200px' />
+<img src='output/x12xx5x78.png' title='x12xx5x78' width='200px' />
+<img src='output/x12xx5x7x.png' title='x12xx5x7x' width='200px' />
+<img src='output/x12xx5xx8.png' title='x12xx5xx8' width='200px' />
+<img src='output/x12xx5xxx.png' title='x12xx5xxx' width='200px' />
+<img src='output/x12xxx678.png' title='x12xxx678' width='200px' />
+<img src='output/x12xxx67x.png' title='x12xxx67x' width='200px' />
+<img src='output/x12xxx6x8.png' title='x12xxx6x8' width='200px' />
+<img src='output/x12xxx6xx.png' title='x12xxx6xx' width='200px' />
+<img src='output/x12xxxx78.png' title='x12xxxx78' width='200px' />
+<img src='output/x12xxxx7x.png' title='x12xxxx7x' width='200px' />
+<img src='output/x12xxxxx8.png' title='x12xxxxx8' width='200px' />
+<img src='output/x12xxxxxx.png' title='x12xxxxxx' width='200px' />
+<img src='output/x1x345678.png' title='x1x345678' width='200px' />
+<img src='output/x1x34567x.png' title='x1x34567x' width='200px' />
+<img src='output/x1x3456x8.png' title='x1x3456x8' width='200px' />
+<img src='output/x1x3456xx.png' title='x1x3456xx' width='200px' />
+<img src='output/x1x345x78.png' title='x1x345x78' width='200px' />
+<img src='output/x1x345x7x.png' title='x1x345x7x' width='200px' />
+<img src='output/x1x345xx8.png' title='x1x345xx8' width='200px' />
+<img src='output/x1x345xxx.png' title='x1x345xxx' width='200px' />
+<img src='output/x1x34x678.png' title='x1x34x678' width='200px' />
+<img src='output/x1x34x67x.png' title='x1x34x67x' width='200px' />
+<img src='output/x1x34x6x8.png' title='x1x34x6x8' width='200px' />
+<img src='output/x1x34x6xx.png' title='x1x34x6xx' width='200px' />
+<img src='output/x1x34xx78.png' title='x1x34xx78' width='200px' />
+<img src='output/x1x34xx7x.png' title='x1x34xx7x' width='200px' />
+<img src='output/x1x34xxx8.png' title='x1x34xxx8' width='200px' />
+<img src='output/x1x34xxxx.png' title='x1x34xxxx' width='200px' />
+<img src='output/x1x3x5678.png' title='x1x3x5678' width='200px' />
+<img src='output/x1x3x567x.png' title='x1x3x567x' width='200px' />
+<img src='output/x1x3x56x8.png' title='x1x3x56x8' width='200px' />
+<img src='output/x1x3x56xx.png' title='x1x3x56xx' width='200px' />
+<img src='output/x1x3x5x78.png' title='x1x3x5x78' width='200px' />
+<img src='output/x1x3x5x7x.png' title='x1x3x5x7x' width='200px' />
+<img src='output/x1x3x5xx8.png' title='x1x3x5xx8' width='200px' />
+<img src='output/x1x3x5xxx.png' title='x1x3x5xxx' width='200px' />
+<img src='output/x1x3xx678.png' title='x1x3xx678' width='200px' />
+<img src='output/x1x3xx67x.png' title='x1x3xx67x' width='200px' />
+<img src='output/x1x3xx6x8.png' title='x1x3xx6x8' width='200px' />
+<img src='output/x1x3xx6xx.png' title='x1x3xx6xx' width='200px' />
+<img src='output/x1x3xxx78.png' title='x1x3xxx78' width='200px' />
+<img src='output/x1x3xxx7x.png' title='x1x3xxx7x' width='200px' />
+<img src='output/x1x3xxxx8.png' title='x1x3xxxx8' width='200px' />
+<img src='output/x1x3xxxxx.png' title='x1x3xxxxx' width='200px' />
+<img src='output/x1xx45678.png' title='x1xx45678' width='200px' />
+<img src='output/x1xx4567x.png' title='x1xx4567x' width='200px' />
+<img src='output/x1xx456x8.png' title='x1xx456x8' width='200px' />
+<img src='output/x1xx456xx.png' title='x1xx456xx' width='200px' />
+<img src='output/x1xx45x78.png' title='x1xx45x78' width='200px' />
+<img src='output/x1xx45x7x.png' title='x1xx45x7x' width='200px' />
+<img src='output/x1xx45xx8.png' title='x1xx45xx8' width='200px' />
+<img src='output/x1xx45xxx.png' title='x1xx45xxx' width='200px' />
+<img src='output/x1xx4x678.png' title='x1xx4x678' width='200px' />
+<img src='output/x1xx4x67x.png' title='x1xx4x67x' width='200px' />
+<img src='output/x1xx4x6x8.png' title='x1xx4x6x8' width='200px' />
+<img src='output/x1xx4x6xx.png' title='x1xx4x6xx' width='200px' />
+<img src='output/x1xx4xx78.png' title='x1xx4xx78' width='200px' />
+<img src='output/x1xx4xx7x.png' title='x1xx4xx7x' width='200px' />
+<img src='output/x1xx4xxx8.png' title='x1xx4xxx8' width='200px' />
+<img src='output/x1xx4xxxx.png' title='x1xx4xxxx' width='200px' />
+<img src='output/x1xxx5678.png' title='x1xxx5678' width='200px' />
+<img src='output/x1xxx567x.png' title='x1xxx567x' width='200px' />
+<img src='output/x1xxx56x8.png' title='x1xxx56x8' width='200px' />
+<img src='output/x1xxx56xx.png' title='x1xxx56xx' width='200px' />
+<img src='output/x1xxx5x78.png' title='x1xxx5x78' width='200px' />
+<img src='output/x1xxx5x7x.png' title='x1xxx5x7x' width='200px' />
+<img src='output/x1xxx5xx8.png' title='x1xxx5xx8' width='200px' />
+<img src='output/x1xxx5xxx.png' title='x1xxx5xxx' width='200px' />
+<img src='output/x1xxxx678.png' title='x1xxxx678' width='200px' />
+<img src='output/x1xxxx67x.png' title='x1xxxx67x' width='200px' />
+<img src='output/x1xxxx6x8.png' title='x1xxxx6x8' width='200px' />
+<img src='output/x1xxxx6xx.png' title='x1xxxx6xx' width='200px' />
+<img src='output/x1xxxxx78.png' title='x1xxxxx78' width='200px' />
+<img src='output/x1xxxxx7x.png' title='x1xxxxx7x' width='200px' />
+<img src='output/x1xxxxxx8.png' title='x1xxxxxx8' width='200px' />
+<img src='output/x1xxxxxxx.png' title='x1xxxxxxx' width='200px' />
+
+
+</section>
+
+<footer>
+</footer>
+
+<script type='text/javascript'>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>

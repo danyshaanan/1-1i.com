@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Lorenz Attractor | 1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='googlebot' content='noarchive', 'nosnippet'>
+<meta name='robots'    content='noarchive', 'nosnippet'>
+<meta name='description' content='Graphical rendering of mathematical models in python' />
+<meta name='keywords' content='dany shaanan, math, python, rendering, python PIL, mathematics, code' />
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+<link href='/css/style.css' rel='stylesheet' type='text/css'>
+<style>
+
+</style>
+<!-- <script type='text/javascript' src='js/jquery-1.6.2.min.js'></script> -->
+<!-- <script type='text/javascript'></script> -->
+</head>
+
+<body>
+
+<header>
+  <h6><a class='back' href='/'>&lt;&lt; Go Back</a></h6>
+  <h1>Lorenz Attractor</h1>
+  <h3>Rendered in Python, explained in English</h3>
+  <h5>By <a href='//danyshaanan.com'>Dany Shaanan</a></h5>
+</header>
+
+<section>
+<h4></h4>
+A Lorenz Attractor is a solution of the Lorenz equations, which are ordinary differential equations in 3D.
+Some exhibit chaotic behavior and create nice looking patterns.
+The Lorenz differential equations are:
+<pre>
+dx/dt = o * (y - x)
+dy/dt = x * (p - z) - y
+dz/dt = x * y - b * z
+</pre>
+These equations describe how, at each point in 'time', x, y and z affect the direction of the attractor.
+Once we move a bit in that direction, x, y and z change, and so does the direction.
+In order to simulate this without solving the differential equation,
+we iterate over small enough timesteps.
+<br /><br />
+To pick a specific set of Lorenz equations, we'll set the euqations constants to:
+<pre>
+o = 10
+p = 28
+b = 8/3
+</pre>
+Showing the 3D attractor on a 2D image will not let us see its 3D complexity,
+but an animation of it turning around the y axis can let us see just that:
+
+<br /><br />
+<a href='lorenz_attractor.py'>See the code here</a><br />
+<br /><br />
+
+<img src='output/lorenz.gif' />
+
+<br /><br />
+<br /><br />
+
+
+</section>
+
+<footer>
+</footer>
+
+<script type='text/javascript'>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>

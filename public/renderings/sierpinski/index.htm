@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Sierpinski triangle and other shapes | 1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='googlebot' content='noarchive', 'nosnippet'>
+<meta name='robots'    content='noarchive', 'nosnippet'>
+<meta name='description' content='Graphical rendering of mathematical models in python' />
+<meta name='keywords' content='dany shaanan, math, python, rendering, python PIL, mathematics, code' />
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+<link href='/css/style.css' rel='stylesheet' type='text/css'>
+<style>
+img { margin-bottom: 2em; margin-top: 2em; max-width: 800px; }
+
+table { border-collapse: collapse; }
+table td, table th { padding: 0; }
+
+</style>
+<!-- <script type='text/javascript' src='js/jquery-1.6.2.min.js'></script> -->
+<!-- <script type='text/javascript'></script> -->
+</head>
+
+<body>
+
+<header>
+  <h6><a class='back' href='/'>&lt;&lt; Go Back</a></h6>
+  <h1>Sierpinski triangle and other shapes</h1>
+  <h3>Rendered in Python, explained in English</h3>
+  <h5>By <a href='//danyshaanan.com'>Dany Shaanan</a></h5>
+</header>
+
+<section>
+<h4></h4>
+Sierpinski triangle is a fractal that can be generated in various ways. One of these ways is by pulling a set of points towards the vertices of a triangle in the following way:
+<br /><br />
+A set of random points is generated, as seen in the first row of images.
+<br /><br />
+Those points are devided randomly into three sets coresponding to the three vertices of the triangle, and each point moves half of its way to that vertex.
+This can be seen in the first image of the second row.
+<br /><br />
+This process is repeated, each time redeviding the points into sets. The left-most column show what happens when this is done, as it is usually, on a triangle. The other columns shows the same process on a square, a pentagon, and a hexagon.
+<br /><br />
+
+
+<a href='sierpinski.py'>See the code here</a>
+
+<table>
+  <tr>
+    <td width='25%'>
+      <img src='output/sierpinski_3_0.png' />
+      <img src='output/sierpinski_3_1.png' />
+      <img src='output/sierpinski_3_2.png' />
+      <img src='output/sierpinski_3_3.png' />
+      <img src='output/sierpinski_3_4.png' />
+      <img src='output/sierpinski_3_6.png' />
+      <img src='output/sierpinski_3_9.png' />
+    </td>
+    <td width='25%'>
+      <img src='output/sierpinski_4_0.png' />
+      <img src='output/sierpinski_4_1.png' />
+      <img src='output/sierpinski_4_2.png' />
+      <img src='output/sierpinski_4_3.png' />
+      <img src='output/sierpinski_4_4.png' />
+      <img src='output/sierpinski_4_6.png' />
+      <img src='output/sierpinski_4_9.png' />
+    </td>
+    <td width='25%'>
+      <img src='output/sierpinski_5_0.png' />
+      <img src='output/sierpinski_5_1.png' />
+      <img src='output/sierpinski_5_2.png' />
+      <img src='output/sierpinski_5_3.png' />
+      <img src='output/sierpinski_5_4.png' />
+      <img src='output/sierpinski_5_6.png' />
+      <img src='output/sierpinski_5_9.png' />
+    </td>
+    <td width='25%'>
+      <img src='output/sierpinski_6_0.png' />
+      <img src='output/sierpinski_6_1.png' />
+      <img src='output/sierpinski_6_2.png' />
+      <img src='output/sierpinski_6_3.png' />
+      <img src='output/sierpinski_6_4.png' />
+      <img src='output/sierpinski_6_6.png' />
+      <img src='output/sierpinski_6_9.png' />
+    </td>
+  </tr>
+</table>
+
+<br /><br />
+<br /><br />
+<br /><br />
+
+
+
+</section>
+
+<footer>
+</footer>
+
+<script type='text/javascript'>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>

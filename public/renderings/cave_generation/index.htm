@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Cave generation | 1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='googlebot' content='noarchive', 'nosnippet'>
+<meta name='robots'    content='noarchive', 'nosnippet'>
+<meta name='description' content='Graphical rendering of mathematical models in python' />
+<meta name='keywords' content='dany shaanan, math, python, rendering, python PIL, mathematics, code' />
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+<link href='/css/style.css' rel='stylesheet' type='text/css'>
+<style>
+
+body { background: url('cave_background.png'); }
+
+</style>
+<!-- <script type='text/javascript' src='js/jquery-1.6.2.min.js'></script> -->
+<!-- <script type='text/javascript'></script> -->
+</head>
+
+<body>
+
+<header>
+  <h6><a class='back' href='/'>&lt;&lt; Go Back</a></h6>
+  <h1>Cave generation</h1>
+  <h3>Rendered in Python, explained in English</h3>
+  <h5>By <a href='//danyshaanan.com'>Dany Shaanan</a></h5>
+</header>
+
+<section>
+<h4></h4>
+This is an example of a process that can be used to create 2d cave-like patterns.
+<br /><br />
+Initially, a random map of black and white pixels is generated,
+then, the following process is used to gradually darken the darker areas, and lighten the lighter ones:
+<br /><br />
+Pixels are chosen randomly, and for each we check if it has more black neighboring pixels or white ones.
+Whichever it is, the pixel is changed to that color. If the numbers are equal, the pixel is not changed.
+<br /><br />
+The first image is the original random map. The seventh image is what we get after a little over a million pixel checks.
+
+<br /><br />
+
+<img src='output/cave_1000000000.png' />
+<!-- <img src='output/cave_1000001024.png' /> -->
+<!-- <img src='output/cave_1000002048.png' /> -->
+<!-- <img src='output/cave_1000004096.png' /> -->
+<img src='output/cave_1000008192.png' />
+<!-- <img src='output/cave_1000016384.png' /> -->
+<img src='output/cave_1000032768.png' />
+<img src='output/cave_1000065536.png' />
+<img src='output/cave_1000131072.png' />
+<img src='output/cave_1000262144.png' />
+<!-- <img src='output/cave_1000524288.png' /> -->
+<img src='output/cave_1001048576.png' />
+<img src='output/cave.gif' />
+
+<br /><br />
+After one million checked pixels, it seems that we have reached an equilibrium,
+which means that each pixel has at least 4 neighbors of its own color -
+no matter how many more checks we'll run through, nothing will ever change!
+<br /><br />
+Since the pixels are randomly chosen, however,
+it is possible that we've missed a pixel that could still be changed... Have we?
+<!-- Yes! I've found two, and once one of them will change, that might change the count for one or more of its neighbors... -->
+<br /><br />
+<img src='output/cave_final_big.png' />
+<br /><br />
+<a href='cave_generation.py'>See the code here</a>
+<br /><br />
+In order to avoid the problem of pixels on the edges of the image not actually having the same amount of neighbors,
+we 'wrap' the image around, meaning that the pixels on the top row are considered neighbors of pixels on the bottom row,
+and the same holds for the right-most and left-most columns. This means that the image tiles well!
+See a variation of the code, used to generate the background of this page, <a href='background.py'>here</a>.
+
+</section>
+
+<footer>
+</footer>
+
+<script type='text/javascript'>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>

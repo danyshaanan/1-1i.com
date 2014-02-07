@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>L-system | 1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='googlebot' content='noarchive', 'nosnippet'>
+<meta name='robots'    content='noarchive', 'nosnippet'>
+<meta name='description' content='Graphical rendering of mathematical models in python' />
+<meta name='keywords' content='dany shaanan, math, python, rendering, python PIL, mathematics, code' />
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+<link href='/css/style.css' rel='stylesheet' type='text/css'>
+<style>
+img { margin-bottom: 2em; margin-top: 2em; max-width: 800px; }
+</style>
+<!-- <script type='text/javascript' src='js/jquery-1.6.2.min.js'></script> -->
+<!-- <script type='text/javascript'></script> -->
+</head>
+
+<body>
+
+<header>
+  <h6><a class='back' href='/'>&lt;&lt; Go Back</a></h6>
+  <h1>L-system</h1>
+  <h3>Rendered in Python, explained in English</h3>
+  <h5>By <a href='//danyshaanan.com'>Dany Shaanan</a></h5>
+</header>
+
+<section>
+<h4></h4>
+An L-system, or Lindenmayer System, is a rewritting system that can be used to easily create fractals.
+<br /><br />
+So what is being rewritten? A list of instructions. Let's start with "<b>forward</b>".
+If we'll feed that to a line drawing method, we'll get, obviously, a line:<br />
+<img src='output/snow_flake_0.png' /><br />
+...which is pretty boring, so lets rewrite it; Let's replace "<b>forward</b>" with "<b>forward, 60 degrees left, forward, 120 degrees right, forward, 60 degrees left, forward</b>".
+If we'll deef that to our line drawing method, we'll get this:<br />
+<img src='output/snow_flake_1.png' /><br />
+For the sake of simplicity, lets use 'f' for forward, and 'r' and 'l' for 60 degrees right and left turns.<br />
+Our starting list of instructions is now just 'f', and our replacement rule can be written as 'f' -> 'flfrrflf'.
+<br /><br />
+So if we'll take the last list of instructions, 'flfrrflf', and apply the replacement rule on it, we'll get this: 'flfrrflflflfrrflfrrflfrrflflflfrrflf'.
+This is hard to read, but it will be drawn into this:<br />
+<img src='output/snow_flake_2.png' /><br />
+Notice that each of the segments in the previous result became similar to the whole previous result. That's the consequance of the replacement rule.
+By running more iteration of the replacement rule, we'll get a more and more complex line, that includes smaller and smaller instances of the original replacement:<br />
+<img src='output/snow_flake_3.png' /><br />
+<img src='output/snow_flake_4.png' /><br />
+<img src='output/snow_flake_5.png' /><br />
+
+Other replacement rules, with different angles and different starting states, can result if various interesting results, as can be seen below.
+
+<br /><br />
+<a href='lindenmayer_system.py'>See the code here</a>
+<br /><br />
+<hr /><br />
+
+Starting state: "frfrfrf",<br />
+Replacement rule: "f" -> "ffrflflfrff",<br />
+where 'f' represents 'forward' and 'r' and 'l' represent 90 degrees turns:<br />
+<img src='output/21112.png' /><br /><br />
+
+Starting state: "fRfRfRf",<br />
+Replacement rule: "f" -> "frfllfrf",<br />
+where 'f' represents 'forward' and 'r' and 'l' represent 85 degrees turns, and R represent a 90 degree turn:<br />
+<img src='output/cesaro.png' /><br /><br />
+
+Starting state: "flflflf",<br />
+Replacement rule: "f" -> "ffrfrfrfrfrflf",<br />
+where 'f' represents 'forward' and 'r' and 'l' represent 90 degrees turns:<br />
+<img src='output/circles.png' /><br /><br />
+
+Starting state: "a",<br />
+Replacement rule: "a" -> "arb", "b" -> "alb",<br />
+where 'a' and 'b' represents 'forward' and 'r' and 'l' represent 90 degrees turns:<br />
+<img src='output/dragon.png' /><br /><br />
+
+Starting state: "frfrfrfrf",<br />
+Replacement rule: "f" -> "frfllfrf",<br />
+where 'f' represents 'forward' and 'r' and 'l' represent 72 degrees turns:<br />
+<img src='output/penta_flake.png' /><br /><br />
+
+Starting state: "rrf",<br />
+Replacement rule: "f" -> "rflfflfr",<br />
+where 'f' represents 'forward' and 'r' and 'l' represent 90 degrees turns:<br />
+<img src='output/shell.png' /><br /><br />
+
+Starting state: "f",<br />
+Replacement rule: "f" -> "flfrfrflf",<br />
+where 'f' represents 'forward' and 'r' and 'l' represent 120 degrees turns:<br />
+<img src='output/sierpinski_1.png' /><br /><br />
+
+Starting state: "a",<br />
+Replacement rule: "a" -> "blalb", "b" -> "arbra",<br />
+where 'a' and 'b' represents 'forward' and 'r' and 'l' represent 60 degrees turns:<br />
+<img src='output/sierpinski_2.png' /><br /><br />
+
+Starting state: "arararara",<br />
+Replacement rule: "a" -> "aararararallllaa",<br />
+where 'a' and 'b' represents 'forward' and 'r' and 'l' represent 90 degrees turns:<br />
+<img src='output/star.png' /><br /><br />
+
+Starting state: "frfrfrfrfrf",<br />
+Replacement rule: "f" -> "frfllffrrflf",<br />
+where 'f' represents 'forward' and 'r' and 'l' represent 60 degrees turns:<br />
+<img src='output/swirle.png' /><br /><br />
+
+
+</section>
+
+<footer>
+</footer>
+
+<script type='text/javascript'>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>
+

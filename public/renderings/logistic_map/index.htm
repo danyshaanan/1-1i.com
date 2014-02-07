@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Logistic map | 1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='googlebot' content='noarchive', 'nosnippet'>
+<meta name='robots'    content='noarchive', 'nosnippet'>
+<meta name='description' content='Graphical rendering of mathematical models in python' />
+<meta name='keywords' content='dany shaanan, math, python, rendering, python PIL, mathematics, code' />
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+<link href='/css/style.css' rel='stylesheet' type='text/css'>
+<style>
+img { margin-bottom: 2em; margin-top: 2em; max-width: 800px; }
+</style>
+<!-- <script type='text/javascript' src='js/jquery-1.6.2.min.js'></script> -->
+<!-- <script type='text/javascript'></script> -->
+</head>
+
+<body>
+
+<header>
+  <h6><a class='back' href='/'>&lt;&lt; Go Back</a></h6>
+  <h1>Logistic map</h1>
+  <h3>Rendered in Python, explained in English</h3>
+  <h5>By <a href='//danyshaanan.com'>Dany Shaanan</a></h5>
+</header>
+
+<section>
+<h4></h4>
+The Logistic map is an example of how chaotic behaviour can emerge from simple circumstances.
+<br /><br />
+For values of r between 0 and 4 (left to right), we iterate the following function: (starting with x = 0.5)<br /><br />
+x &lt;- r * x * (1-x)<br /><br />
+For low values of r (left), x eventually sets to zero.
+For medium valus of r (middle), x eventually sets to some single value greater than zero.
+For higher values of r (right), x jumps between two values, then four, then eight, and eventually, goes crazy in a chaotic pattern.<br />
+
+<img src='output/logistic_map_whole.png' /><br /><br />
+
+<img src='output/logistic_map_detail.png' /><br />
+
+<a href='logistic_map.py'>See the code here</a>
+<br /><br />
+<br /><br />
+<br /><br />
+
+
+
+</section>
+
+<footer>
+</footer>
+
+<script type='text/javascript'>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>
+

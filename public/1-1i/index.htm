@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='description' content='The homepage of 1-1i' />
+<meta name='keywords' content='math, mathematics' />
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+
+<style>
+body        { background:#fff; text-align:left; direction:ltr; font: 16px monospace; font-family: 'PT Serif', serif; }
+section     { position: absolute; top: 50%; margin-top: -320px; width: 360px; left: 50%; margin-left: -180px; text-align: justify; }
+section>h1  { text-align: center; font-size: 40px; }
+footer      { position: absolute; bottom: 10px; right: 10px; color: #999; font-size: 14px; }
+
+a:link,a:visited,a:active { color: #666; text-decoration: none; }
+a:hover                   { color: #666; text-decoration: underline; }
+
+canvas#plane         { position: absolute; top: 0px; left: 0px; }
+</style>
+
+<script type='text/javascript' src='/js/jquery-1.6.2.min.js'></script>
+<script type='text/javascript' src='/js/math.min.js'></script>
+<script>
+
+var radius = 450;
+var zero = math.complex(0,0);
+var main = math.complex(radius, radius);
+var grad;
+
+function ei(x) {
+  return math.select(x ? x : math.complex(0,0)).multiply(math.i).exp().multiply(radius).done();
+}
+
+function line(ctx, width, stroke, path) {
+  path.reverse();
+  ctx.lineWidth = width;
+  ctx.strokeStyle = stroke;
+  ctx.beginPath();
+  while (p = path.pop()) ctx.lineTo(p.re, p.im);
+  ctx.stroke();
+}
+
+function draw(ctx, t) {
+  ctx.lineWidth = 0.3;
+  ctx.beginPath();
+  ctx.arc(0, 0, radius, 0, Math.PI/2);
+  ctx.stroke();
+  line(ctx, 1, 'black', [zero, main]);//arrow
+  line(ctx, 0.9, grad, [ei(0), main, ei(math.PI/2)]);//arrow sides
+  line(ctx, 0.1, 'black', [ei(0), main, ei(math.PI/2)]);//square
+  line(ctx, 0.3, 'black', [zero, ei(t)]);//hand
+}
+
+function start() {
+  var canvas = document.getElementById('plane');
+  var ctx = canvas.getContext('2d');
+  grad = ctx.createLinearGradient(radius, radius, radius-20, radius-20);
+  grad.addColorStop(0, "#000");
+  grad.addColorStop(1, "#fff");
+
+  var t = 0;
+  var d = 1;
+  setInterval(function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    t += d*0.01;
+    if (t > math.PI/2 || t < 0) d *= -1;
+    draw(ctx, t);
+  }, 30);
+}
+
+$(start);
+</script>
+
+</head>
+<body>
+
+<header>
+<canvas id='plane' width='1200px' height='600px'></canvas>
+</header>
+
+
+<section>
+  <h1>1-1i</h1>
+  1-1i is a complex number.
+  It is the result of the subtraction of the imaginary number 1i from the real number 1.
+  1 is just 1.
+  1i is another way of writing 1*i, which is just i.
+  i is the square root of -1, and I don't care if that does not make sense.
+  Like all complex numbers, it can be represented as a dot on the plane.
+  If we will pick the x-axis to represent the real part of the number and to go from left to right,
+  and the y-axis to represent the imaginary part of the number and to go from down to up,
+  then 1-1i will be a bit right and a bit down from the zero of the plane, which is at 0+0i.
+  Its distance from the zero will be about 1.4142.
+  The fifth power of 1-1i is equal to minus four time 1-1i,
+  and if you think that's weird, just wait till I'll tell you about j and k.
+
+</section>
+
+<footer>
+  <a href='/'>Go back</a>
+</footer>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>

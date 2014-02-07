@@ -1,0 +1,12 @@
+*             { box-sizing: border-box; -moz-box-sizing: border-box; }
+html          { overflow-y: scroll; margin: 0px;  padding: 0px; }
+body          { color: #000; max-width: 920px; margin: auto; font-size: 15px; font-family: 'PT Serif', serif; }
+header        { margin-top: 3em; padding-bottom: 1em; border-bottom: solid #888 1px; }
+header>*      { margin-bottom: 0.3em; margin-top: 0em; }
+/*footer        { position: fixed; bottom: 0px; right: 0px; width: 300px; height: 300px; }*/
+h1            { text-shadow: 1px 1px 1px #888; }
+a.back       { color: #aaa !important; }
+pre           { font-size: 12px; }
+a:link,a:visited,a:active { color: #444; text-decoration: underline; }
+a:hover                   { color: #444; text-decoration: none; }
+footer            { margin: auto; margin-bottom: 2em; margin-top: 8em; width: 100px; height: 100px; background-image: url('/img/thumdelbrot_00100px.png'); }
