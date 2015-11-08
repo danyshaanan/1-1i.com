@@ -1,0 +1,96 @@
+<html lang=en>
+<body>
+
+<script>
+'use strict'
+
+function Canvas(width) {
+  var canvas = document.createElement('canvas')
+  canvas.width  = width
+  canvas.height = Math.round(width / 1.75)
+  var ctx = canvas.getContext('2d')
+  var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  this.set = function(x, y, c) {
+    var index = (y * canvas.width + x) * 4
+    imageData.data[index] = c.r % 256
+    imageData.data[++index] = c.g % 256
+    imageData.data[++index] = c.b % 256
+    imageData.data[++index] = 255
+  }
+  this.translate = function(x, y, def) {
+    return {
+      x: (x - canvas.width/2)/def.zoom + def.cx,
+      y: (y - canvas.height/2)/def.zoom + def.cy
+    }
+  }
+  this.drawPixels = function(cb) {
+    for (var y = 0; y < canvas.height; ++y) {
+      for (var x = 0; x < canvas.width; ++x) {
+        this.set(x, y, cb(x, y))
+      }
+    }
+    ctx.putImageData(imageData, 0, 0)
+  }
+  document.getElementsByTagName('body')[0].appendChild(canvas)
+}
+
+////////////////////////////////////////////////////////////////////////////////
+var r2 = Math.pow(8, 2)
+var oneByLogR2 = 1/Math.log(r2)
+
+function iterations(p0, max) {
+  var p = { x: 0, y: 0 }
+  var i = 0
+  while (++i < max && p.x*p.x + p.y*p.y < r2) {
+    p = { x: p.x * p.x - p.y * p.y + p0.x, y: 2 * p.x * p.y + p0.y }
+  }
+  if (i < max) return i - Math.log(p.x*p.x + p.y*p.y)*oneByLogR2
+  return 0
+}
+
+function color(i) {
+  return {
+    r: i && 128 + 127 * Math.sin(2 * Math.PI * i / 2),
+    g: i && 128 + 127 * Math.sin(2 * Math.PI * i / 5),
+    b: i &&  40 + 40 * Math.sin(2 * Math.PI * i / 13),
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+var actions = {
+  82: function() { def.zoom *= 1.61 }, //r
+  70: function() { def.zoom /= 1.61 }, //f
+  87: function() { def.cy -= 80 / def.zoom }, //up w
+  65: function() { def.cx -= 80 / def.zoom }, //left a
+  83: function() { def.cy += 80 / def.zoom }, //down s
+  68: function() { def.cx += 80 / def.zoom }, //right d
+  84: function() { def.i += 50 }, //t
+  71: function() { def.i -= 50 }, //g
+}
+
+var def = { cx: -0.0235220048, cy: -0.99887996567, zoom: 250, i: 150 }
+var canvas = new Canvas(1000)
+
+function getColor(x, y) {
+  return color(iterations(canvas.translate(x, y, def), def.i))
+}
+
+canvas.drawPixels(getColor)
+
+document.onkeyup = function(e){
+  if (actions[e.keyCode]) {
+    e.preventDefault()
+    var t = Date.now()
+    actions[e.keyCode]()
+    canvas.drawPixels(getColor)
+    document.title = Date.now() - t
+  }
+}
+
+
+
+</script>
+
+</body>
+</html>
