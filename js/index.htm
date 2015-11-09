@@ -114,6 +114,17 @@ document.onmouseup = function(upE) {
   canvas.drawPixels(getColor)
 }
 
+
+window.onwheel = function(e) {
+  def.cx += e.layerX * def.zoom
+  def.cy += e.layerY * def.zoom
+  def.zoom *= Math.pow(2, Math.sign(e.wheelDelta))
+  def.cx -= e.layerX * def.zoom
+  def.cy -= e.layerY * def.zoom
+  canvas.drawPixels(getColor)
+  return false
+}
+
 </script>
 
 </body>
