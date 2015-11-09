@@ -4,6 +4,8 @@
 <script>
 'use strict'
 
+////////////////////// Canvas class ////////////////////////////////////////////
+
 function Canvas(width, height) {
   var canvas = this.canvas = document.createElement('canvas')
   canvas.width  = width
@@ -17,12 +19,6 @@ function Canvas(width, height) {
     imageData.data[index+2] = c.b % 256
     imageData.data[index+3] = 255
   }
-  this.translate = function(x, y, def) {
-    return {
-      x: x * def.zoom + def.cx,
-      y: y * def.zoom + def.cy
-    }
-  }
   this.drawPixels = function(cb) {
     for (var y = 0; y < canvas.height; ++y) {
       for (var x = 0; x < canvas.width; ++x) {
@@ -34,7 +30,7 @@ function Canvas(width, height) {
   document.body.appendChild(canvas)
 }
 
-////////////////////////////////////////////////////////////////////////////////
+////////////////////// Logic ///////////////////////////////////////////////////
 
 function hueToRgb(h){
     function hueToC(t){
@@ -50,17 +46,16 @@ function hueToRgb(h){
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
 var r2 = Math.pow(8, 2)
 var oneByLogR2 = 1/Math.log(r2)
 
-function iterations(p0, max) {
+function iterations(x0, y0, max) {
   var x = 0
   var y = 0
   var i = 0
   while (++i < max && x*x + y*y < r2) {
-    var tx = x*x - y*y + p0.x
-    y = 2*x*y + p0.y
+    var tx = x*x - y*y + x0
+    y = 2*x*y + y0
     x = tx
   }
   if (i < max) return i - Math.log(x*x + y*y)*oneByLogR2
@@ -70,7 +65,18 @@ function color(i) {
   return hueToRgb(i/20)
 }
 
-////////////////////////////////////////////////////////////////////////////////
+////////////////////// Execution ///////////////////////////////////////////////
+
+var def = { cx: -3, cy: -1.5, zoom: 0.005, i: 100 }
+
+function getColor(x, y) {
+  return color(iterations(x * def.zoom + def.cx, y * def.zoom + def.cy, def.i))
+}
+
+var canvas = new Canvas(1000, 600)
+canvas.drawPixels(getColor)
+
+////////////////////// Keyboard ////////////////////////////////////////////////
 
 var actions = {
   73: function() { def.i += 50 }, //i
@@ -79,21 +85,22 @@ var actions = {
   76: function() { def = JSON.parse(window.localStorage.def) }, //l
 }
 
-var def = { cx: -3, cy: -1.5, zoom: 0.005, i: 100 }
-var canvas = new Canvas(1000, 600)
-
-function getColor(x, y) {
-  return color(iterations(canvas.translate(x, y, def), def.i))
-}
-
-canvas.drawPixels(getColor)
-
 document.onkeyup = function(e){
   if (actions[e.keyCode]) {
     e.preventDefault()
     actions[e.keyCode]()
     canvas.drawPixels(getColor)
   }
+}
+
+////////////////////// Mouse ///////////////////////////////////////////////////
+
+function zoomAround(zoom, mouseEvent) {
+  def.cx += mouseEvent.layerX * def.zoom
+  def.cy += mouseEvent.layerY * def.zoom
+  def.zoom *= zoom
+  def.cx -= mouseEvent.layerX * def.zoom
+  def.cy -= mouseEvent.layerY * def.zoom
 }
 
 var downE
@@ -105,25 +112,20 @@ document.onmouseup = function(upE) {
     def.cx += diff.x * def.zoom
     def.cy += diff.y * def.zoom
   } else {
-    def.cx += upE.layerX * def.zoom
-    def.cy += upE.layerY * def.zoom
-    def.zoom *= upE.which === 1 ? 0.5 : 2
-    def.cx -= upE.layerX * def.zoom
-    def.cy -= upE.layerY * def.zoom
+    zoomAround(upE.which === 1 ? 0.5 : 2, upE)
   }
   canvas.drawPixels(getColor)
 }
 
 
 window.onwheel = function(e) {
-  def.cx += e.layerX * def.zoom
-  def.cy += e.layerY * def.zoom
-  def.zoom *= Math.pow(2, Math.sign(e.wheelDelta))
-  def.cx -= e.layerX * def.zoom
-  def.cy -= e.layerY * def.zoom
+  zoomAround(Math.pow(2, Math.sign(e.wheelDelta)), e)
   canvas.drawPixels(getColor)
   return false
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
 
 </script>
 
