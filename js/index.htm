@@ -9,7 +9,7 @@ body { margin: 0; overflow: hidden; }
 <script>
 'use strict'
 
-////////////////////// Canvas class ////////////////////////////////////////////
+////////////////////// Canvas //////////////////////////////////////////////////
 
 function Canvas() {
   var canvas = this.canvas = document.createElement('canvas')
@@ -49,32 +49,33 @@ function iterations(x0, y0, max) {
   var y = 0
   var i = 0
   while (++i < max && x*x + y*y < r2) {
-    var tx = x*x - y*y + x0
-    y = 2*x*y + y0
-    x = tx
+    var prevX = x
+    x = x*x - y*y + x0
+    y = 2*prevX*y + y0
   }
   if (i < max) return i - Math.log(x*x + y*y)*oneByLogR2
 }
 
 ////////////////////// Colors //////////////////////////////////////////////////
 
-function hueToRgb(h, l){
+function rainbow(i, lightness){
     // h += 1000000000 - Date.now() / 10000 //animation
     function hueToC(t){
-        if (t < 1/6) return  6 * (t      )
-        if (t < 1/2) return  1
-        if (t < 2/3) return -6 * (t - 2/3)
-        return 0
+      t %= 1
+      if (t < 1/6) return 6 * t
+      if (t < 1/2) return 1
+      if (t < 2/3) return 4 - 6 * t
+      return 0
     }
     return {
-      r: l * hueToC((h + 1/3)%1),
-      g: l * hueToC( h       %1),
-      b: l * hueToC((h + 2/3)%1)
+      r: lightness * hueToC(i + 1/3),
+      g: lightness * hueToC(i + 2/3),
+      b: lightness * hueToC(i + 0/3)
     }
 }
 
 function iterationsToColor(iterationsToEscape, iterationsLeft) {
-  return hueToRgb(iterationsToEscape/120, 255 * Math.min(1, iterationsLeft/20))
+  return rainbow(iterationsToEscape/120, 255 * Math.min(1, iterationsLeft/20))
 }
 
 ////////////////////// Execution ///////////////////////////////////////////////
