@@ -1,4 +1,9 @@
 <html lang=en>
+<head>
+<style>
+body { margin: 0; overflow: hidden; }
+</style>
+</head>
 <body>
 
 <script>
@@ -6,12 +11,16 @@
 
 ////////////////////// Canvas class ////////////////////////////////////////////
 
-function Canvas(width, height) {
+function Canvas() {
   var canvas = this.canvas = document.createElement('canvas')
-  canvas.width  = width
-  canvas.height = height
-  var ctx = canvas.getContext('2d')
-  var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  var ctx, imageData
+  this.init = function() {
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+    ctx = canvas.getContext('2d')
+    imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  }
+  this.init()
   this.set = function(x, y, c) {
     var index = (canvas.width * y + x) << 2
     imageData.data[index+0] = c.r % 256
@@ -32,20 +41,6 @@ function Canvas(width, height) {
 
 ////////////////////// Logic ///////////////////////////////////////////////////
 
-function hueToRgb(h){
-    function hueToC(t){
-        if (t < 1/6) return  6 * (t      )
-        if (t < 1/2) return  1
-        if (t < 2/3) return -6 * (t - 2/3)
-        return 0
-    }
-    return {
-      r: 255 * hueToC((h + 1/3)%1),
-      g: 255 * hueToC( h       %1),
-      b: 255 * hueToC((h + 2/3)%1)
-    }
-}
-
 var r2 = Math.pow(8, 2)
 var oneByLogR2 = 1/Math.log(r2)
 
@@ -61,31 +56,63 @@ function iterations(x0, y0, max) {
   if (i < max) return i - Math.log(x*x + y*y)*oneByLogR2
 }
 
-function color(i) {
-  return hueToRgb(i/20)
+////////////////////// Colors //////////////////////////////////////////////////
+
+function hueToRgb(h, l){
+    // h += 1000000000 - Date.now() / 10000 //animation
+    function hueToC(t){
+        if (t < 1/6) return  6 * (t      )
+        if (t < 1/2) return  1
+        if (t < 2/3) return -6 * (t - 2/3)
+        return 0
+    }
+    return {
+      r: l * hueToC((h + 1/3)%1),
+      g: l * hueToC( h       %1),
+      b: l * hueToC((h + 2/3)%1)
+    }
+}
+
+function iterationsToColor(iterationsToEscape, iterationsLeft) {
+  return hueToRgb(iterationsToEscape/120, 255 * Math.min(1, iterationsLeft/20))
 }
 
 ////////////////////// Execution ///////////////////////////////////////////////
 
-var def = { cx: -3, cy: -1.5, zoom: 0.005, i: 100 }
+
+var def = { cx: -3, cy: -1.5, zoom: 1/256, i: 88 }
 
 function getColor(x, y) {
-  return color(iterations(x * def.zoom + def.cx, y * def.zoom + def.cy, def.i))
+  var i = iterations(x * def.zoom + def.cx, y * def.zoom + def.cy, def.i)
+  return iterationsToColor(i, def.i - i)
 }
 
-var canvas = new Canvas(1000, 600)
+var canvas = new Canvas()
 canvas.drawPixels(getColor)
+
+window.onresize = function() {
+  canvas.init()
+  canvas.drawPixels(getColor)
+}
+
+
+function frame() {
+  canvas.drawPixels(getColor)
+  requestAnimationFrame(frame)
+}
+
+// frame() //animation
 
 ////////////////////// Keyboard ////////////////////////////////////////////////
 
 var actions = {
-  73: function() { def.i += 50 }, //i
-  79: function() { def.i -= 50 }, //o
+  73: function() { def.i += 20 }, //i
+  79: function() { def.i = Math.max(8, def.i - 20) }, //o
   83: function() { window.localStorage.def = JSON.stringify(def) }, //s
   76: function() { def = JSON.parse(window.localStorage.def) }, //l
 }
 
-document.onkeyup = function(e){
+window.onkeyup = function(e){
   if (actions[e.keyCode]) {
     e.preventDefault()
     actions[e.keyCode]()
@@ -104,11 +131,11 @@ function zoomAround(zoom, mouseEvent) {
 }
 
 var downE
-document.oncontextmenu = function(e) { return false }
-document.onmousedown = function(e) { downE = e }
-document.onmouseup = function(upE) {
+canvas.canvas.oncontextmenu = function(e) { return false }
+canvas.canvas.onmousedown = function(e) { downE = e }
+canvas.canvas.onmouseup = function(upE) {
   var diff = { x: downE.layerX - upE.layerX, y: downE.layerY - upE.layerY }
-  if (diff.x || diff.y) {
+  if (diff.x*diff.x + diff.y*diff.y > 25) {
     def.cx += diff.x * def.zoom
     def.cy += diff.y * def.zoom
   } else {
@@ -118,8 +145,8 @@ document.onmouseup = function(upE) {
 }
 
 
-window.onwheel = function(e) {
-  zoomAround(Math.pow(2, Math.sign(e.wheelDelta)), e)
+canvas.canvas.onwheel = function(e) {
+  zoomAround(Math.pow(2, -Math.sign(e.wheelDelta)), e)
   canvas.drawPixels(getColor)
   return false
 }
