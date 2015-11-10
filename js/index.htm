@@ -29,12 +29,14 @@ function Canvas() {
     imageData.data[index+3] = 255
   }
   this.drawPixels = function(cb) {
+    var t = Date.now()
     for (var y = 0; y < canvas.height; ++y) {
       for (var x = 0; x < canvas.width; ++x) {
         this.set(x, y, cb(x, y))
       }
     }
     ctx.putImageData(imageData, 0, 0)
+    document.title = Date.now() - t
   }
   document.body.appendChild(canvas)
 }
