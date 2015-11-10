@@ -44,16 +44,16 @@ function Canvas() {
 var r2 = Math.pow(8, 2)
 var oneByLogR2 = 1/Math.log(r2)
 
-function iterations(x0, y0, max) {
-  var x = 0
-  var y = 0
+function iterations(a0, b0, max) {
+  var a = 0
+  var b = 0
   var i = 0
-  while (++i < max && x*x + y*y < r2) {
-    var prevX = x
-    x = x*x - y*y + x0
-    y = 2*prevX*y + y0
+  while (++i < max && a*a + b*b < r2) {
+    var prevA = a
+    a = a*a - b*b + a0
+    b = 2*prevA*b + b0
   }
-  if (i < max) return i - Math.log(x*x + y*y)*oneByLogR2
+  if (i < max) return i - Math.log(a*a + b*b)*oneByLogR2
 }
 
 ////////////////////// Colors //////////////////////////////////////////////////
@@ -81,10 +81,10 @@ function iterationsToColor(iterationsToEscape, iterationsLeft) {
 ////////////////////// Execution ///////////////////////////////////////////////
 
 
-var def = { cx: -3, cy: -1.5, zoom: 1/256, i: 88 }
+var def = { cA: -3, cB: -1.5, zoom: 1/256, i: 88 }
 
 function getColor(x, y) {
-  var i = iterations(x * def.zoom + def.cx, y * def.zoom + def.cy, def.i)
+  var i = iterations(x * def.zoom + def.cA, y * def.zoom + def.cB, def.i)
   return iterationsToColor(i, def.i - i)
 }
 
@@ -124,11 +124,11 @@ window.onkeyup = function(e){
 ////////////////////// Mouse ///////////////////////////////////////////////////
 
 function zoomAround(zoom, mouseEvent) {
-  def.cx += mouseEvent.layerX * def.zoom
-  def.cy += mouseEvent.layerY * def.zoom
+  def.cA += mouseEvent.layerX * def.zoom
+  def.cB += mouseEvent.layerY * def.zoom
   def.zoom *= zoom
-  def.cx -= mouseEvent.layerX * def.zoom
-  def.cy -= mouseEvent.layerY * def.zoom
+  def.cA -= mouseEvent.layerX * def.zoom
+  def.cB -= mouseEvent.layerY * def.zoom
 }
 
 var downE
@@ -137,8 +137,8 @@ canvas.canvas.onmousedown = function(e) { downE = e }
 canvas.canvas.onmouseup = function(upE) {
   var diff = { x: downE.layerX - upE.layerX, y: downE.layerY - upE.layerY }
   if (diff.x*diff.x + diff.y*diff.y > 25) {
-    def.cx += diff.x * def.zoom
-    def.cy += diff.y * def.zoom
+    def.cA += diff.x * def.zoom
+    def.cB += diff.y * def.zoom
   } else {
     zoomAround(upE.which === 1 ? 0.5 : 2, upE)
   }
