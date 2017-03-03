@@ -10,7 +10,11 @@ const controls = (_ => {
         79: o => def.i = Math.max(8, def.i - 20),
         83: s => window.localStorage.def = JSON.stringify(def),
         76: l => Object.assign(def, JSON.parse(window.localStorage.def)),
-        78: n => def.generator++
+        78: n => def.generator++,
+        37: left => def.jA += 0.01,
+        39: right => def.jA -= 0.01,
+        38: up => def.jB += 0.01,
+        40: down => def.jB -= 0.01,
       }
 
       window.onkeyup = function(e){

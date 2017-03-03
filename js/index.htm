@@ -12,14 +12,9 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-let def = { cA: -3, cB: -1.5, zoom: 1/256, i: 80, generator: 0 }
+let def = { cA: -3, cB: -1.5, zoom: 1/256, i: 80, generator: 0, jA: -0.82, jB: -0.2 }
 
-const generators = [
-  math.julia([-0.8340606689453125, -0.20891571044921875]),
-  math.mandelbrot,
-  math.julia([+0.197, 0.55]),
-  math.julia([-0.197, 0.81])
-]
+const generators = [, math.mandelbrot]
 
 let generator
 
@@ -27,11 +22,12 @@ const getColor = (x, y) => {
   const i = generator([x * def.zoom + def.cA, y * def.zoom + def.cB], def.i)
 
   if (i === Infinity) return { r: 0, g: 0, b: 0 }
-  return color.hsvToRgb((i/240)%1, 1, Math.min(1, (def.i - i)/30))
+  return color.hsvToRgb((i/240)%1, 1, Math.min(1, (def.i - i)/60))
 }
 
 const canvas = Canvas()
 const draw = _ => {
+  generators[0] = math.julia([def.jA, def.jB])
   generator = generators[def.generator % generators.length]
   canvas.drawPixels(getColor)
 }
