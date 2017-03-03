@@ -1,180 +1,43 @@
 <html lang=en>
-<head>
-<style>
-body { margin: 0; overflow: hidden; }
-</style>
-</head>
+<head><style>body { margin: 0; overflow: hidden; }</style></head>
 <body>
+
+<script src='controls.js'></script>
+<script src='canvas.js'></script>
+<script src='color.js'></script>
+<script src='math.js'></script>
 
 <script>
 'use strict'
 
-////////////////////// Canvas //////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-function Canvas() {
-  var canvas = this.canvas = document.createElement('canvas')
-  var ctx, imageData
-  this.init = function() {
-    canvas.width = document.documentElement.clientWidth
-    canvas.height = document.documentElement.clientHeight
-    ctx = canvas.getContext('2d')
-    imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-  }
-  this.init()
-  this.set = function(x, y, c) {
-    var index = (canvas.width * y + x) << 2
-    imageData.data[index+0] = 255 * c.r % 256
-    imageData.data[index+1] = 255 * c.g % 256
-    imageData.data[index+2] = 255 * c.b % 256
-    imageData.data[index+3] = 255
-  }
-  this.drawPixels = function(cb) {
-    var t = Date.now()
-    for (var y = 0; y < canvas.height; ++y) {
-      for (var x = 0; x < canvas.width; ++x) {
-        this.set(x, y, cb(x, y))
-      }
-    }
-    ctx.putImageData(imageData, 0, 0)
-    document.title = Date.now() - t
-  }
-  document.body.appendChild(canvas)
+let def = { cA: -3, cB: -1.5, zoom: 1/256, i: 80, generator: 0 }
+
+const generators = [
+  math.mandelbrot,
+  math.julia([+0.197, 0.55]),
+  math.julia([-0.197, 0.81])
+]
+
+let generator
+
+const getColor = (x, y) => {
+  const i = generator([x * def.zoom + def.cA, y * def.zoom + def.cB], def.i)
+
+  if (i === Infinity) return { r: 0, g: 0, b: 0 }
+  return color.hsvToRgb((i/240)%1, 1, Math.min(1, (def.i - i)/30))
 }
 
-////////////////////// Logic ///////////////////////////////////////////////////
-
-var r2 = Math.pow(2, 6)
-var oneByLogR2 = 1/Math.log(r2)
-
-function iterations(a0, b0, max) {
-  var a = 0
-  var b = 0
-  var i = 0
-  while (++i < max && a*a + b*b < r2) {
-    var prevA = a
-    a = a*a - b*b + a0
-    b = 2*prevA*b + b0
-  }
-  return i < max ? i - Math.log(a*a + b*b) * oneByLogR2 : Infinity
-}
-
-////////////////////// Colors //////////////////////////////////////////////////
-
-function hsvToRgb(h, s, v) {
-  const i = Math.floor(h * 6)
-  const f = h * 6 - i
-
-  const p = v * (1 - s * (1    ))
-  const q = v * (1 - s * (    f))
-  const t = v * (1 - s * (1 - f))
-
-  if (i === 0) return { r: v, g: t, b: p }
-  if (i === 1) return { r: q, g: v, b: p }
-  if (i === 2) return { r: p, g: v, b: t }
-  if (i === 3) return { r: p, g: q, b: v }
-  if (i === 4) return { r: t, g: p, b: v }
-  if (i === 5) return { r: v, g: p, b: q }
-}
-
-// function hue2rgb(p, q, t) {
-//   t %= 6
-//   if (t < 1) return p + (q - p) * t
-//   if (t < 3) return q
-//   if (t < 4) return p + (q - p) * (4 - t)
-//   return p
-// }
-
-// function hslToRgb(h, s, l) {
-//   if (s === 0) return { r: l, g: l, b: l }
-//   const q = l < 0.5 ? l * (1 + s) : l + s - l * s
-//   const p = 2 * l - q
-//   h *= 6
-//   return {
-//     r: hue2rgb(p, q, h + 2),
-//     g: hue2rgb(p, q, h    ),
-//     b: hue2rgb(p, q, h + 4)
-//   }
-// }
-
-function iterationsToColor(iterationsToEscape, iterationsLeft) {
-  // iterationsToEscape += 1000000000000 - Date.now() / 100 //animation
-  if (iterationsToEscape === Infinity) return { r: 0, g: 0, b: 0 }
-  return hsvToRgb((iterationsToEscape/120)%1, 1, Math.min(1, iterationsLeft/30))
-}
-
-////////////////////// Execution ///////////////////////////////////////////////
-
-
-var def = { cA: -3, cB: -1.5, zoom: 1/256, i: 88 }
-
-function getColor(x, y) {
-  var i = iterations(x * def.zoom + def.cA, y * def.zoom + def.cB, def.i)
-  return iterationsToColor(i, def.i - i)
-}
-
-var canvas = new Canvas()
-canvas.drawPixels(getColor)
-
-window.onresize = function() {
-  canvas.init()
+const canvas = Canvas()
+const draw = _ => {
+  generator = generators[def.generator % generators.length]
   canvas.drawPixels(getColor)
 }
 
-
-function frame() {
-  canvas.drawPixels(getColor)
-  requestAnimationFrame(frame)
-}
-
-// frame() //animation
-
-////////////////////// Keyboard ////////////////////////////////////////////////
-
-var actions = {
-  73: function() { def.i += 20 }, //i
-  79: function() { def.i = Math.max(8, def.i - 20) }, //o
-  83: function() { window.localStorage.def = JSON.stringify(def) }, //s
-  76: function() { def = JSON.parse(window.localStorage.def) }, //l
-}
-
-window.onkeyup = function(e){
-  if (actions[e.keyCode]) {
-    e.preventDefault()
-    actions[e.keyCode]()
-    canvas.drawPixels(getColor)
-  }
-}
-
-////////////////////// Mouse ///////////////////////////////////////////////////
-
-function zoomAround(zoom, mouseEvent) {
-  def.cA += mouseEvent.layerX * def.zoom
-  def.cB += mouseEvent.layerY * def.zoom
-  def.zoom *= zoom
-  def.cA -= mouseEvent.layerX * def.zoom
-  def.cB -= mouseEvent.layerY * def.zoom
-}
-
-var downE
-canvas.canvas.oncontextmenu = function(e) { return false }
-canvas.canvas.onmousedown = function(e) { downE = e }
-canvas.canvas.onmouseup = function(upE) {
-  var diff = { x: downE.layerX - upE.layerX, y: downE.layerY - upE.layerY }
-  if (diff.x*diff.x + diff.y*diff.y > 25) {
-    def.cA += diff.x * def.zoom
-    def.cB += diff.y * def.zoom
-  } else {
-    zoomAround(upE.which === 1 ? 0.5 : 2, upE)
-  }
-  canvas.drawPixels(getColor)
-}
-
-
-canvas.canvas.onwheel = function(e) {
-  zoomAround(Math.pow(2, -Math.sign(e.wheelDelta)), e)
-  canvas.drawPixels(getColor)
-  return false
-}
+;(window.onresize = _ => (canvas.init(), draw()))()
+controls.keyboard(def, draw)
+controls.mouse(def, canvas, draw)
 
 ////////////////////////////////////////////////////////////////////////////////
 
