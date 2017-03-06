@@ -4,7 +4,7 @@ const math = (_ => {
   const r2 = Math.pow(2, 6)
   const abs2 = (a, b) => a * a + b * b
 
-  const julia = c => (z, max) => {
+  const getJulia = c => (z, max) => {
     let a = z[0]
     let b = z[1]
     let prevA, i = 0
@@ -18,7 +18,8 @@ const math = (_ => {
   }
 
   return {
-    julia,
-    mandelbrot: (z, max) => julia(z)(z, max)
+    sampleJulia: getJulia([-0.82, 0.2]),
+    getJulia,
+    mandelbrot: (z, max) => getJulia(z)(z, max)
   }
 })()
