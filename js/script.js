@@ -29,16 +29,18 @@ const Canvas = size => {
   return { rect, url }
 }
 
+const Random = seed => _ => (seed = seed * 48271 % 2147483647) % 2
+
 ////////////////////////////////////////////////////////////////////////////////
 
 const eca_pattern = i => (2**8 + i).toString(2).slice(1).split('').map(v => +v)
-const eca_init_row = [...Array(2**8).keys()].map(n => (''+Math.sin(n+1))[7]%2)
 
 const eca = (id, size = defaultSize) => {
   const pattern = eca_pattern(id)
   const { dot, url } = Matrix(size)
+  const init_row = [...Array(size).keys()].map(Random(1))
 
-  for (let r = 0, row = eca_init_row; r < size; r++) {
+  for (let r = 0, row = init_row; r < size; r++) {
     const nextRow = []
     for (let i = 0; i < size; i++) {
       if (!row[i]) dot(i, r)
