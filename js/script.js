@@ -192,14 +192,14 @@ cst.range = [0, 40]
 const fractals = [
   ['Sierpinski', 6, 'a',      { a: '-b+a+b-', b: '+a-b-a+' }],
   ['Koch',       6, 'ftftft', { f: 'f-f++f-f' }],
-  ['Hilbert',    4, 'q',      { q: '-pf+qfq+fp-', p: '+qf-pfp-fq+'}],
+  ['Hilbert',    4, 'A',      { A: '-Bf+AfA+fB-', B: '+Af-BfB-fA+'}],
   ['Dragon 1',   4, 'x',      { x: 'x+yf', y: 'fx-y' }],
-  ['Dragon 2',   8, 'a',      { a: 'a+f+b', b: 'a-f-b'}],
-  ['Shell',      4, 'f',      { f: '+f-ff-f+'}]
+  ['Dragon 2',   8, '+a',     { a: 'a+f+b', b: 'a-f-b'}],
+  ['Shell',      4, 'f',      { f: '-f+ff+f-'}]
 ].map(([name, a, start, dict]) => {
   let path = start
   while (path.length < 2000) path = path.replace(/./g, c => dict[c] || c)
-  return { name, path, angle: Math.PI * 2 / a, tAngle: Math.PI * 4 / start.length }
+  return { name, path: path.replace(/[AB]/g, ''), angle: Math.PI * 2 / a, tAngle: Math.PI * 4 / start.length }
 })
 
 const generatePoints = ({ path, angle, tAngle }) => {
