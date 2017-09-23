@@ -1,8 +1,6 @@
 'use strict'
 
-const {
-  eca, mr4, lor, cvg, cst, mr9
-}=(_=>{
+{
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -39,12 +37,6 @@ const Canvas = size => {
 const Random = seed => _ => (seed = seed * 48271 % 2147483647)
 const RandomBool = seed => (r => _ => r() % 2)(Random(seed))
 const RandomFloat = seed => (r => _ => r() / 2147483647)(Random(seed))
-
-const wrapF = f => (...a) => {
-  const [t0, r, t1] = [Date.now(), f(...a), Date.now()]
-  return Object.assign(r, { title: r.title + ` (${t1 - t0}ms)`})
-}
-const wrap = o => Object.keys(o).reduce((r, k) => Object.assign(r, { [k]: wrapF(o[k]) }), {})
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -192,6 +184,14 @@ const cst = (o, size = defaultSize, block = 2**2) => {
 cst.range = [0, 40]
 
 ////////////////////////////////////////////////////////////////////////////////
-return wrap({
-  eca, mr4, lor, cvg, cst, mr9
-})})()
+
+const externalize = { eca, mr4, lor, cvg, cst, mr9 }
+
+const wrap = f => (...a) => {
+  const [t0, r, t1] = [Date.now(), f(...a), Date.now()]
+  return Object.assign(r, { title: r.title + ` (${t1 - t0}ms)`})
+}
+
+Object.keys(externalize).forEach(k => window[k] = wrap(externalize[k]))
+
+}
