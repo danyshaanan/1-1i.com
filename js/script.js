@@ -25,9 +25,9 @@ const Canvas = size => {
   const rect = ctx.fillRect.bind(ctx)
   const url = canvas.toDataURL.bind(canvas)
   const transform = ctx.transform.bind(ctx)
-  const polygon = (points, width, fill) => {
+  const polygon = (points, width, close, fill) => {
     ctx.lineWidth = width
-    ctx.moveTo(...points[points.length - 1])
+    if (close) ctx.moveTo(...points[points.length - 1])
     points.forEach(p => ctx.lineTo(...p))
     fill ? ctx.fill() : ctx.stroke()
   }
@@ -176,7 +176,7 @@ const cst = (o, size = defaultSize, block = 2**2) => {
   }
 
   transform(zoom, 0, 0, zoom, size / 2, size / 2)
-  polygon(points, 1/zoom, o.fill)
+  polygon(points, 1/zoom, 1, o.fill)
 
   return { src: url(), title: JSON.stringify(o) }
 }
@@ -185,7 +185,58 @@ cst.range = [0, 40]
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const externalize = { eca, mr4, lor, cvg, cst, mr9 }
+const fractals = [
+  ['Sierpinski', 6, 'a',      { a: '-b+a+b-', b: '+a-b-a+' }],
+  ['Koch',       6, 'ftftft', { f: 'f-f++f-f' }],
+  ['Hilbert',    4, 'q',      { q: '-pf+qfq+fp-', p: '+qf-pfp-fq+'}],
+  ['Dragon 1',   4, 'x',      { x: 'x+yf', y: 'fx-y' }],
+  ['Dragon 2',   8, 'a',      { a: 'a+f+b', b: 'a-f-b'}],
+  ['Shell',      4, 'f',      { f: '+f-ff-f+'}]
+].map(([name, a, start, dict]) => {
+  let path = start
+  while (path.length < 2000) path = path.replace(/./g, c => dict[c] || c)
+  return { name, path, angle: Math.PI * 2 / a, tAngle: Math.PI * 4 / start.length }
+})
+
+const generatePoints = ({ path, angle, tAngle }) => {
+  let [dir, p] = [0, { x: 0, y: 0 }]
+  const actions = {
+    '+': _ => { dir += angle },
+    '-': _ => { dir -= angle },
+    't': _ => { dir += tAngle },
+    'f': _ => p = { x: p.x + Math.cos(dir), y: p.y + Math.sin(dir) }
+  }
+  return [...path].map(c => (actions[c] || actions.f)()).filter(Boolean)
+}
+
+const getBoundingBox = points => {
+  const x = { max: -0/1, min: +0/1 }
+  const y = { max: -0/1, min: +0/1 }
+
+  for (const p of points) {
+    x.max = Math.max(x.max, p.x)
+    x.min = Math.min(x.min, p.x)
+    y.max = Math.max(y.max, p.y)
+    y.min = Math.min(y.min, p.y)
+  }
+  return { x, y }
+}
+
+const lss = (id, size = defaultSize) => {
+  let points = generatePoints(fractals[id])
+  const { x, y } = getBoundingBox(points)
+  const zoom = size / Math.max(x.max - x.min, y.max - y.min) * 0.95
+
+  const { transform, polygon, url } = Canvas(size)
+  transform(zoom, 0, 0, zoom, (size - zoom * (x.max + x.min)) / 2, (size - zoom * (y.max + y.min)) / 2)
+  polygon(points.map(({x, y}) => [x, y]), 1/zoom)
+
+  return { src: url(), title: JSON.stringify({}) }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+const externalize = { eca, mr4, lor, cvg, cst, mr9, lss }
 
 const wrap = f => (...a) => {
   const [t0, r, t1] = [Date.now(), f(...a), Date.now()]
