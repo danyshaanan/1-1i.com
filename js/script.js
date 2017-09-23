@@ -1,7 +1,7 @@
 'use strict'
 
 const {
-  eca, mr4, lor, cvg, cst
+  eca, mr4, lor, cvg, cst, mr9
 }=(_=>{
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -73,21 +73,25 @@ eca.range = [0, 2**8]
 
 const mr4_pattern = i => [i & 0xf, i >> 4].map(n => [1,2,4,8].map(d => +!!(d & n)))
 
-const mr4 = (id, size = defaultSize, block = 2**2) => {
-  const pattern = mr4_pattern(id)
+const mrx = (S, pattern, size = defaultSize, block = 2**2) => {
   const { rect, url } = Canvas(size)
+
+  if (typeof pattern === 'number') pattern = mr4_pattern(pattern)
 
   const square = (x, y, s, color) => {
     if (s > block)
-      for (const i of [0,1])
-        for (const j of [0,1])
-          square(x + i * s/2, y + j * s/2, s/2, pattern[color][i + 2 * j])
+      for (const i of [...Array(S).keys()])
+        for (const j of [...Array(S).keys()])
+          square(x + i * s/S, y + j * s/S, s/S, pattern[color][i + S * j])
     else if (color) rect(x, y, s, s)
   }
   square(0, 0, size, 0)
 
-  return { src: url(), title: id + ': ' + JSON.stringify(pattern) }
+  return { src: url(), title: JSON.stringify(pattern) }
 }
+
+const mr9 = mrx.bind(null, 3)
+const mr4 = mrx.bind(null, 2)
 
 mr4.range = [0, 2**8]
 
@@ -189,5 +193,5 @@ cst.range = [0, 40]
 
 ////////////////////////////////////////////////////////////////////////////////
 return wrap({
-  eca, mr4, lor, cvg, cst
+  eca, mr4, lor, cvg, cst, mr9
 })})()
