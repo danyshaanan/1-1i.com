@@ -40,6 +40,12 @@ const Random = seed => _ => (seed = seed * 48271 % 2147483647)
 const RandomBool = seed => (r => _ => r() % 2)(Random(seed))
 const RandomFloat = seed => (r => _ => r() / 2147483647)(Random(seed))
 
+const wrapF = f => (...a) => {
+  const [t0, r, t1] = [Date.now(), f(...a), Date.now()]
+  return Object.assign(r, { title: r.title + ` (${t1 - t0}ms)`})
+}
+const wrap = o => Object.keys(o).reduce((r, k) => Object.assign(r, { [k]: wrapF(o[k]) }), {})
+
 ////////////////////////////////////////////////////////////////////////////////
 
 const eca_pattern = i => (2**8 + i).toString(2).slice(1).split('').map(v => +v)
@@ -115,7 +121,6 @@ lor.range = [0, 6]
 ////////////////////////////////////////////////////////////////////////////////
 
 const cvg = (id, s = defaultSize) => {
-  const t0 = Date.now()
   const random = RandomBool(id)
   const a = []
   for (let x = 0; x < s; x++) for (let y = (a[x] = [], 0); y < s; y++) a[x][y] = random()
@@ -144,7 +149,7 @@ const cvg = (id, s = defaultSize) => {
     }
   }
 
-  return { src: url(), title: `Cave id #${id} (${Date.now() - t0}ms)` }
+  return { src: url(), title: `Cave id #${id}` }
 }
 
 cvg.range = [1, 5]
@@ -183,6 +188,6 @@ const cst = (o, size = defaultSize, block = 2**2) => {
 cst.range = [0, 40]
 
 ////////////////////////////////////////////////////////////////////////////////
-return {
+return wrap({
   eca, mr4, lor, cvg, cst
-}})()
+})})()
