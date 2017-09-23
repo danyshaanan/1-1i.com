@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Dany Shaanan - Fractal Coast</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+<meta name='googlebot' content='noarchive' />
+<meta name='robots'    content='noarchive, nosnippet' />
+<meta name='description' content='Fractal Coast on Canvas' />
+
+<style>
+body { margin: 0px; padding: 0px; }
+canvas { position:absolute; left:0px; top:0px; }
+div#text { position:absolute; left:10px; top:10px; }
+div#credit { position:absolute; right: 10px; bottom:10px; }
+div#nonChrome { position:absolute; left: 10px; bottom:10px; }
+.chrome div#nonChrome { display: none; }
+</style>
+</head>
+<body>
+
+<canvas id='canvas'>
+	<div>Sorry, but your browser does not support the Canvas element!</div>
+</canvas>
+
+<script>
+
+///////// Rand.js /////////////////////////////
+
+function Rand(seed) {
+  if (!(this instanceof Rand)) return new Rand(seed);
+  this.index = seed;
+}
+
+Rand.prototype.rand = function() {
+  return parseFloat('0.'+Math.sin(this.index++).toString().substr(6));
+}
+
+
+///////// Coast.js /////////////////////////////
+
+// Point
+
+function Point(x, y) {
+  if (!(this instanceof Point)) return new Point(x, y);
+  this.x = x;
+  this.y = y;
+}
+
+// Segment
+
+function Segment(p1, p2) {
+  if (!(this instanceof Segment)) return new Segment(p1, p2);
+  this.start = p1;
+  this.end = p2;
+}
+
+Segment.prototype.length = function() {
+  return Math.sqrt(Math.pow(this.end.x - this.start.x, 2) + Math.pow(this.end.y - this.start.y, 2));
+}
+
+// Coast
+
+function Coast(segments) {
+  if (!(this instanceof Coast)) return new Coast(segments);
+  this._segments = [];
+  this.add(segments);
+  this._random = Math;
+  this._randomFunc = 'random';
+}
+
+Coast.prototype.add = function(segments) {
+  if (segments instanceof Array) {
+    this._segments = this._segments.concat(segments);
+  } else if (segments instanceof Segment) {
+    this._segments.push(segments);
+  }
+}
+
+Coast.prototype.remove = function(index) {
+  this._segments.splice(index,1);
+}
+
+Coast.prototype.breakAt = function(index, chaos) {
+  var segment = this._segments[index];
+  var middle = Point((segment.end.x + segment.start.x)/2, (segment.end.y + segment.start.y)/2 );
+  var r = chaos * segment.length() * this._random[this._randomFunc]();
+  var alpha = 2 * Math.PI * this._random[this._randomFunc]();
+  middle.x += r * Math.cos(alpha);
+  middle.y += r * Math.sin(alpha);
+  this._segments.splice(index,1);
+  this.add([Segment(segment.start, middle), Segment(middle, segment.end)]);
+}
+
+Coast.prototype.length = function() {
+  return this._segments.length;
+}
+
+Coast.prototype.getSegment = function(i) {
+  return this._segments[i || 0];
+}
+
+Coast.prototype.getSegments = function() {
+  return this._segments;
+}
+
+Coast.prototype.draw  = function(ctx, canvas) {
+  var w = canvas.width;
+  var h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  ctx.beginPath();
+  if (this._segments.length == 0) return;
+  var start = this._segments[0].start;
+  ctx.moveTo(w/2 + start.x, h/2 + start.y);
+  this._segments.map(function(v, i) {
+    ctx.lineTo(w/2 + v.end.x, h/2 + v.end.y);
+  });
+  ctx.stroke();
+  ctx.fill();
+}
+
+Coast.prototype.setRandom = function(rand, randfunc) {
+  this._random = rand;
+  this._randomFunc = randfunc;
+}
+
+///////// inline /////////////////////////////
+
+
+
+function createPolygon(n, radius, origin) {
+  var points = Array.apply(null, Array(n)).map(function(v, i) {
+    var teta = 2 * Math.PI * i / n;
+    return Point(
+      origin.x + radius*Math.cos(teta),
+      origin.y + radius*Math.sin(teta)
+    );
+  });
+
+  return points.map(function(v, i) {
+    return Segment(points[i], points[(i+1)%points.length]);
+  });
+}
+
+function setSizes() {
+    state.width = canvas.width = window.innerWidth;
+    state.height = canvas.height = window.innerHeight;
+    gonSize = 0.4 * Math.min(state.width, state.height);
+}
+
+var iterations = 9;
+var coast = Coast();
+var chaosDir = 1/256;
+var maxChaos = 0.5;
+var gon = 3;
+var gonSize = 0;
+var seed = 0;
+var chaos = 0.01;
+
+var state = {};
+var cache = {};
+
+var frame = function() {
+  chaos += chaosDir;
+  if (Math.abs(chaos) > maxChaos) chaosDir *= -1;
+  state.chaos = chaos;
+  var stateString = JSON.stringify(state);
+  if (stateString in cache) {
+    coast = cache[stateString];
+  } else {
+    coast = Coast(createPolygon(gon, gonSize, Point(0, 0)));
+    coast.setRandom(Rand(seed),'rand');
+    for (var i=0; i<iterations; i++) {
+      var l = coast.length();
+      for (var j=0; j<l; j++) {
+        coast.breakAt(0, chaos);
+      }
+    }
+    cache[stateString] = coast;
+  }
+  coast.draw(ctx, canvas);
+  requestAnimationFrame(frame);
+}
+
+window.onload = function() {
+  window.addEventListener('resize', setSizes, false);
+  setSizes();
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  frame();
+};
+
+
+
+</script>
+
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-37601688-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+</body>
+</html>

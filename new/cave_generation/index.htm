@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Dany Shaanan - Cave Generation</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+<meta name='googlebot' content='noarchive' />
+<meta name='robots'    content='noarchive, nosnippet' />
+<meta name='description' content='Pseudo random cave Generation in JavaScript' />
+
+<script>
+'use strict';
+
+function emptyArray(size, val) {
+  return Array.apply(null, new Array(size)).map(function(){return val});
+}
+
+function Rand() {
+  this.seed = 0;
+  this.random = function() {
+    this.seed += 1;
+    var r = Math.abs(Math.sin(this.seed))*8192;
+    return r - (r|0);
+  }
+}
+
+function Map(height, width, rand) {
+  this.rand = rand || Math;
+  this.height = height;
+  this.width = width;
+  this.grid = emptyArray(height).map(function(){return emptyArray(width, 0)});
+}
+
+Map.prototype.randomize = function(p) {
+  if (p === undefined) p = 0.5;
+  this.grid = this.grid.map(function(row) {
+    return row.map(function(v) {return (this.rand.random() > p) ? 1 : 0}.bind(this))
+  }.bind(this));
+}
+
+Map.prototype.cavify = function(iterations) {
+  for (var i=0; i<iterations; i++) {
+    var r = Math.floor(this.rand.random() * this.height);
+    var c = Math.floor(this.rand.random() * this.width);
+    var nei = [[1,1],[-1,-1],[1,0],[-1,0],[1,-1],[-1,1],[0,1],[0,-1]];
+    var sum = nei.reduce(function(s,p) {
+      var x = (r + p[0] + this.height)%this.height;
+      var y = (c + p[1] + this.width)%this.width;
+      return s + this.grid[x][y];
+    }.bind(this),0)
+    if (sum > 4) this.grid[r][c] = 1;
+    if (sum < 4) this.grid[r][c] = 0;
+  }
+}
+
+Map.prototype.str = function() {
+  var TRUE  = '  ';
+  var FALSE = 'XX'
+  return this.grid.map(function(row){return row.map(function(c){return c?TRUE:FALSE}).join('')}).join('\n');
+};
+
+Map.prototype.print = function() {
+  // console.log(emptyArray(10,'\n').join(''));
+  // console.log(this.str());
+
+  document.body.innerHTML = '<pre>' + this.str() + '</pre>';
+}
+
+
+window.onload = function() {
+
+  var map = new Map(40,40, new Rand());
+  map.randomize(0.50);
+  map.cavify(17200);
+  map.print();
+}
+
+</script>
+</head>
+</body>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-37601688-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+</body>
+</html>

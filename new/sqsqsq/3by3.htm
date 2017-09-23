@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Dany Shaanan - ???</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+<meta name='googlebot' content='noarchive' />
+<meta name='robots'    content='noarchive, nosnippet' />
+<meta name='description' content="???" />
+<style>
+* { margin: 0; padding: 0; }
+img { border: grey 1px solid; position: absolute; right: 0; top: 0; }
+body { font-size: 50px; }
+</style>
+</head>
+<body>
+
+<script>
+'use strict'
+
+function genPatternImage(pattern, size = 3**6, block = 9) {
+  const canvas = document.createElement('canvas')
+  canvas.width = canvas.height = size
+  const ctx = canvas.getContext('2d')
+
+  const square = (x, y, s, color) => {
+    if (s > block)
+      for (const i of [...Array(S).keys()])
+        for (const j of [...Array(S).keys()])
+          square(x + i * s/S, y + j * s/S, s/S, pattern[color][i + S * j])
+    else if (color) ctx.fillRect(x, y, s, s)
+  }
+  square(0, 0, size, 0)
+
+  return canvas.toDataURL()
+}
+
+const S = 3
+let power = 1
+
+const setP = d => { power = Math.max(0, Math.min(power + d, 5)); render() }
+const click = (j, i) => { p[j][i] = 1 - p[j][i]; render() }
+const a = (script, text) => `<a href="javascript:${script}">${text}</a>`
+
+const p = [Array(S ** 2).fill(0), Array(S ** 2).fill(0)]
+if (S === 3) for(let i = 0; i < 9; i++) p[0][i] = 1 - (p[1][i] = +(i == 4))
+
+const grid = t => [...Array(S).keys()].map(
+             i => [...Array(S).keys()].map(
+               j => a(`click(${t},${S*i+j})`, p[t][S*i+j])
+             ).join('')
+           ).join('\n')
+
+const render = _ => document.body.innerHTML = `
+  <pre>${grid(0)}\n\n${grid(1)}\n\n${a('setP(1)','<')} ${a('setP(-1)','>')}</pre>
+  <img src='${genPatternImage(p, 700, S**power)}'/>
+`
+
+render()
+
+// document.body.appendChild(genPatternImage([[0,1,0,0,0,1,1,0,0],[0,1,0,1,0,0,0,0,1]], 3**6, 3**2))
+
+
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-37601688-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+</body>
+</html>
