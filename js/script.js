@@ -16,7 +16,11 @@ const Matrix = size => {
   const { canvas, ctx } = Element(size)
   const image = ctx.getImageData(0, 0, size, size)
   const url = _ => (ctx.putImageData(image, 0, 0), canvas.toDataURL())
-  const dot = (x, y) => image.data[4 * ((x|0) + size * (y|0)) + 3] = 255
+  const dot = (x, y, l = 0) => {
+    let i = 4 * ((x|0) + size * (y|0)) + 4
+    image.data[--i] = 255
+    if (l) while (i % 4) image.data[--i] = l
+  }
   return { dot, url }
 }
 
@@ -236,7 +240,41 @@ const lss = (id, size = defaultSize) => {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const externalize = { eca, mr4, lor, cvg, cst, mr9, lss }
+const getJulia = c => (z, max) => {
+  let [i, [a, b], r2, t] = [0, z, Math.pow(2, 6)]
+  while (true) {
+    if (++i > max) return Infinity
+    if ((t = a * a + b * b) > r2) return Math.max(0, i - Math.log(t) / Math.log(r2))
+    ;[a, b] = [a * a - b * b + c[0], 2 * a * b + c[1]]
+  }
+}
+const mandelbrot = (z, max) => getJulia(z)(z, max)
+
+const getDef = (id, size) => {
+  const zs = [!1,[0.287,-0.01],[0.159,0.571],[-0.66,0.334],[-0.82,0.176],[0.329,0.470]]
+  return { a: id ? 0 : -0.66, b: 0, zoom: 3.3 / size, i: 50, gen: id ? getJulia(zs[id]) : mandelbrot }
+}
+
+const mnd = (def, size = defaultSize) => {
+  if (typeof def === 'number') def = getDef(def, size)
+
+  const { dot, url } = Matrix(size)
+
+  const getColor = i => isFinite(i) ? 128 + 128 * Math.sin(i) : 0
+  const pixelLocation = (x, y) => [(x - size/2) * def.zoom + def.a, (y - size/2) * def.zoom + def.b]
+
+  for (let y = 0; y < size; ++y) {
+    for (let x = 0; x < size; ++x) {
+      dot(x, y, getColor(def.gen(pixelLocation(x, y), def.i)))
+    }
+  }
+
+  return { src: url(), title: `?` }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+const externalize = { eca, mr4, lor, cvg, cst, mr9, lss, mnd }
 
 const wrap = f => (...a) => {
   const [t0, r, t1] = [Date.now(), f(...a), Date.now()]
