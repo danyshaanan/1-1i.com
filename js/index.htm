@@ -12,30 +12,23 @@ img { border: grey 1px solid; margin: 5px; }
 </head>
 <body>
 
+<script src='script.js'></script>
 <script>
 'use strict'
 
-function genPatternImage(pattern, size = 256, block = 2**2) {
-  const canvas = document.createElement('canvas')
-  canvas.width = canvas.height = size
-  const ctx = canvas.getContext('2d')
+const image = (cb, ...rest) => document.body.appendChild(Object.assign(new Image, cb(...rest)))
+const br = _ => document.body.appendChild(document.createElement('br'))
+const all = cb => { for (let i = cb.range[0]; i < cb.range[1]; i++) image(cb, i) }
 
-  const square = (x, y, s, color) => {
-    if (s > block)
-      for (const i of [0,1])
-        for (const j of [0,1])
-          square(x + i * s/2, y + j * s/2, s/2, pattern[color][i + 2 * j])
-    else if (color) ctx.fillRect(x, y, s, s)
-  }
-  square(0, 0, size, 0)
+// all(eca)
+// all(mr4)
 
-  return Object.assign(new Image, { title: JSON.stringify(pattern), src: canvas.toDataURL() })
-}
+;[29, 86, 126, 165].forEach(i => image(eca, i))
+br()
+;[105, 197, 228, 248].forEach(i => image(mr4, i))
+br()
+image(lor)
 
-const genPattern = i => [i & 0xf, i >> 4].map(n => [1,2,4,8].map(d => +!!(d & n)))
-const addPattern = i => document.body.appendChild(genPatternImage(genPattern(i)))
-
-for (let i = 0; i < 2**8; i++) addPattern(i)
 
 </script>
 
