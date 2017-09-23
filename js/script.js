@@ -1,7 +1,7 @@
 'use strict'
 
 const {
-  eca, mr4, lor, cvg
+  eca, mr4, lor, cvg, cst
 }=(_=>{
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -26,11 +26,19 @@ const Canvas = size => {
   const { canvas, ctx } = Element(size)
   const rect = ctx.fillRect.bind(ctx)
   const url = canvas.toDataURL.bind(canvas)
-  return { rect, url }
+  const transform = ctx.transform.bind(ctx)
+  const polygon = (points, width, fill) => {
+    ctx.lineWidth = width
+    ctx.moveTo(...points[points.length - 1])
+    points.forEach(p => ctx.lineTo(...p))
+    fill ? ctx.fill() : ctx.stroke()
+  }
+  return { transform, rect, polygon, url }
 }
 
 const Random = seed => _ => (seed = seed * 48271 % 2147483647)
 const RandomBool = seed => (r => _ => r() % 2)(Random(seed))
+const RandomFloat = seed => (r => _ => r() / 2147483647)(Random(seed))
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -142,6 +150,39 @@ const cvg = (id, s = defaultSize) => {
 cvg.range = [1, 5]
 
 ////////////////////////////////////////////////////////////////////////////////
+
+const cst = (o, size = defaultSize, block = 2**2) => {
+  const { transform, polygon, url } = Canvas(size)
+  const p = 4
+  const zoom = .4 * size
+  const random = RandomFloat(o.seed)
+  const cis = (r, a) => [r * Math.cos(a), r * Math.sin(a)]
+
+  let points = [...Array(p).keys()].map(n => n/p*2*Math.PI).map(a => ([Math.sin(a), Math.cos(a)]))
+
+  for (let _ = 0; _ < o.iterations; _++) {
+    let temp = []
+    for (let i = 0; i < points.length; i++) {
+      const a = points[i]
+      const b = points[(i + 1) % points.length]
+      temp.push(a)
+      const dist = Math.hypot(a[0] - b[0], a[1] - b[1])
+      if (dist < 3 / zoom) continue
+      const vector = cis(.6 * dist * random(), 2 * Math.PI * random())
+      temp.push([0, 1].map(i => (a[i] + b[i]) / 2 + vector[i]))
+    }
+    points = temp
+  }
+
+  transform(zoom, 0, 0, zoom, size / 2, size / 2)
+  polygon(points, 1/zoom, o.fill)
+
+  return { src: url(), title: JSON.stringify(o) }
+}
+
+cst.range = [0, 40]
+
+////////////////////////////////////////////////////////////////////////////////
 return {
-  eca, mr4, lor, cvg
+  eca, mr4, lor, cvg, cst
 }})()

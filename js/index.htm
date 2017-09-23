@@ -21,10 +21,13 @@ const image = (cb, ...rest) => document.body.appendChild(Object.assign(new Image
 const br = _ => document.body.appendChild(document.createElement('br'))
 const all = cb => { for (let i = cb.range[0]; i < cb.range[1]; i++) image(cb, i) }
 
+// all(cst)
 // all(eca)
 // all(mr4)
 // all(lor)
 
+;[0, 1, 2, 5, 10, 21].forEach(i => image(cst, { seed: 1, iterations: i, fill: i > 10 }) )
+br()
 ;[1, 2, 3, 4, 5, 6].forEach(i => image(cvg, i))
 br()
 ;[105, 113, 197, 200, 228, 248].forEach(i => image(mr4, i))
