@@ -1,7 +1,7 @@
 'use strict'
 
 const {
-  eca, mr4, lor
+  eca, mr4, lor, cvg
 }=(_=>{
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -104,6 +104,43 @@ const lor = (id, size = defaultSize, block = 2**2) => {
 lor.range = [0, 6]
 
 ////////////////////////////////////////////////////////////////////////////////
+
+const cvg = (id, s = defaultSize) => {
+  const t0 = Date.now()
+  const random = Random(id)
+  const a = []
+  for (let x = 0; x < s; x++) for (let y = (a[x] = [], 0); y < s; y++) a[x][y] = random()
+
+  for (let _ = 0; _ < 5; _++) {
+    for (let x = 0; x < s; x++) {
+      for (let y = 0; y < s; y++) {
+        const sum = a[(x+s-1)%s][(y+s-1)%s] +
+                    a[   x     ][(y+s-1)%s] +
+                    a[(  x+1)%s][(y+s-1)%s] +
+                    a[(  x+1)%s][   y     ] +
+                    a[(  x+1)%s][(  y+1)%s] +
+                    a[   x     ][(  y+1)%s] +
+                    a[(x+s-1)%s][(  y+1)%s] +
+                    a[(x+s-1)%s][   y     ] // This ugly thing is highly performant :[
+        if (sum > 4) a[x][y] = 1
+        if (sum < 4) a[x][y] = 0
+      }
+    }
+  }
+
+  const { dot, url } = Matrix(s)
+  for (let x = 0; x < s; x++) {
+    for (let y = 0; y < s; y++) {
+      if (a[x][y]) dot(x, y)
+    }
+  }
+
+  return { src: url(), title: `Cave id #${id} (${Date.now() - t0}ms)` }
+}
+
+cvg.range = [1, 5]
+
+////////////////////////////////////////////////////////////////////////////////
 return {
-  eca, mr4, lor
+  eca, mr4, lor, cvg
 }})()
