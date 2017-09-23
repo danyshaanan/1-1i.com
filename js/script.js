@@ -29,7 +29,8 @@ const Canvas = size => {
   return { rect, url }
 }
 
-const Random = seed => _ => (seed = seed * 48271 % 2147483647) % 2
+const Random = seed => _ => (seed = seed * 48271 % 2147483647)
+const RandomBool = seed => (r => _ => r() % 2)(Random(seed))
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +39,7 @@ const eca_pattern = i => (2**8 + i).toString(2).slice(1).split('').map(v => +v)
 const eca = (id, size = defaultSize) => {
   const pattern = eca_pattern(id)
   const { dot, url } = Matrix(size)
-  const init_row = [...Array(size).keys()].map(Random(1))
+  const init_row = [...Array(size).keys()].map(RandomBool(1))
 
   for (let r = 0, row = init_row; r < size; r++) {
     const nextRow = []
@@ -107,7 +108,7 @@ lor.range = [0, 6]
 
 const cvg = (id, s = defaultSize) => {
   const t0 = Date.now()
-  const random = Random(id)
+  const random = RandomBool(id)
   const a = []
   for (let x = 0; x < s; x++) for (let y = (a[x] = [], 0); y < s; y++) a[x][y] = random()
 
