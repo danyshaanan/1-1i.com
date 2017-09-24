@@ -19,23 +19,17 @@ const t0 = Date.now()
 
 const image = (cb, ...rest) => document.body.appendChild(Object.assign(new Image, cb(...rest)))
 const br = _ => document.body.appendChild(document.createElement('br'))
-const all = cb => { for (let i = cb.range[0]; i < cb.range[1]; i++) image(cb, i) }
+const add = (list, cb) => (br(), list.forEach(cb))
 
-// all(cst)
-// all(eca)
-// all(mr4)
-// all(lor)
-
-br();[29, 86, 126, 145, 165, 182].forEach(i => image(eca, i))
-br();[841390220, 107020255, 3515601291, 519981995, 774893103, 1517752098].forEach(i => image(mr4, i))
-br();[0, 1, 2, 3, 4, 5].forEach(i => image(lss, i))
-br();[233130, 233106, 43281, 74808, 8687, 82572].forEach(i => image(mr3, i))
-br();[0, 1, 2, 5, 10, 21].forEach(i => image(cst, { seed: 1, iterations: i, fill: i > 10 }) )
-br();[105, 113, 197, 200, 228, 248].forEach(i => image(mr2, i))
-br();[0, 1, 2, 3, 4, 5].forEach(i => image(mnd, i))
-br();[1, 2, 3, 4, 5, 6].forEach(i => image(cvg, i))
-br();[0, 1, 2, 3, 4, 5].forEach(i => image(lor, i))
-
+add([29, 86, 126, 145, 165, 182], i => image(eca, i))
+add([841390220, 107020255, 3515601291, 519981995, 774893103, 1517752098], i => image(mr4, i))
+add([0, 1, 2, 3, 4, 5], i => image(lss, i))
+add([233130, 233106, 43281, 74808, 8687, 82572], i => image(mr3, i))
+add([0, 1, 2, 5, 10, 21], i => image(cst, { seed: 1, iterations: i, fill: i > 10 }) )
+add([105, 113, 197, 200, 228, 248], i => image(mr2, i))
+add([0, 1, 2, 3, 4, 5], i => image(mnd, i))
+add([1, 2, 3, 4, 5, 6], i => image(cvg, i))
+add([0, 1, 2, 3, 4, 5], i => image(lor, i))
 
 
 document.title = Date.now() - t0

@@ -63,23 +63,20 @@ const eca = (id, size = defaultSize) => {
   return { src: url(), title: id + ': ' + JSON.stringify(pattern) }
 }
 
-eca.range = [0, 2**8]
-
 ////////////////////////////////////////////////////////////////////////////////
 
 const mrx_patterns = S => i => [i & 2**(S**2)-1, i >> (S**2)].map(n => [...Array((S**2)).keys()].map(d => +!!(2**d & n)))
-const reverse = pattern => parseInt(pattern.toString().replace(/,/g,''),2)
+const reverse = pattern => parseInt(pattern.reverse().toString().replace(/,/g,''),2)
 
-const mrx = (S, pattern, size = defaultSize, block = 2**2) => {
-  const { rect, url } = Canvas(size)
-
+const mrx = S => (pattern, size = defaultSize, block = 2**2) => {
   if (typeof pattern === 'number') pattern = mrx_patterns(S)(pattern)
-  else console.log(reverse(pattern))
+  const { rect, url } = Canvas(size)
+  const range = [...Array(S).keys()]
 
   const square = (x, y, s, color) => {
     if (s > block)
-      for (const i of [...Array(S).keys()])
-        for (const j of [...Array(S).keys()])
+      for (const i of range)
+        for (const j of range)
           square(x + i * s/S, y + j * s/S, s/S, pattern[color][i + S * j])
     else if (color) rect(x, y, s, s)
   }
@@ -88,11 +85,10 @@ const mrx = (S, pattern, size = defaultSize, block = 2**2) => {
   return { src: url(), title: JSON.stringify(pattern) }
 }
 
-const mr4 = mrx.bind(null, 4)
-const mr3 = mrx.bind(null, 3)
-const mr2 = mrx.bind(null, 2)
-
-mr4.range = [0, 2**8]
+const mr2 = mrx(2)
+const mr3 = mrx(3)
+const mr4 = mrx(4)
+const mr5 = mrx(5)
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -118,8 +114,6 @@ const lor = (id, size = defaultSize, block = 2**2) => {
 
   return { src: url(), title: `alpha = ${id / 10} * PI` }
 }
-
-lor.range = [0, 6]
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -155,12 +149,9 @@ const cvg = (id, s = defaultSize) => {
   return { src: url(), title: `Cave id #${id}` }
 }
 
-cvg.range = [1, 5]
-
 ////////////////////////////////////////////////////////////////////////////////
 
 const cst = (o, size = defaultSize, block = 2**2) => {
-  const { transform, polygon, url } = Canvas(size)
   const p = 4
   const zoom = .4 * size
   const random = RandomFloat(o.seed)
@@ -182,13 +173,12 @@ const cst = (o, size = defaultSize, block = 2**2) => {
     points = temp
   }
 
+  const { transform, polygon, url } = Canvas(size)
   transform(zoom, 0, 0, zoom, size / 2, size / 2)
   polygon(points, 1/zoom, 1, o.fill)
 
   return { src: url(), title: JSON.stringify(o) }
 }
-
-cst.range = [0, 40]
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -199,8 +189,7 @@ const fractals = [
   ['Dragon 1',   4, 'x',      { x: 'x+yf', y: 'fx-y' }],
   ['Dragon 2',   8, '+a',     { a: 'a+f+b', b: 'a-f-b'}],
   ['Shell',      4, 'f',      { f: '-f+ff+f-'}]
-].map(([name, a, start, dict]) => {
-  let path = start
+].map(([name, a, start, dict, path = start]) => {
   while (path.length < 2000) path = path.replace(/./g, c => dict[c] || c)
   return { name, path: path.replace(/[AB]/g, ''), angle: Math.PI * 2 / a, tAngle: Math.PI * 4 / start.length }
 })
@@ -217,16 +206,12 @@ const generatePoints = ({ path, angle, tAngle }) => {
 }
 
 const getBoundingBox = points => {
-  const x = { max: -0/1, min: +0/1 }
-  const y = { max: -0/1, min: +0/1 }
-
-  for (const p of points) {
-    x.max = Math.max(x.max, p.x)
-    x.min = Math.min(x.min, p.x)
-    y.max = Math.max(y.max, p.y)
-    y.min = Math.min(y.min, p.y)
-  }
-  return { x, y }
+  const res = { x: { max: -0/1, min: 0/1 }, y: { max: -0/1, min: 0/1 } }
+  for (const p of points)
+    for (const f of ['max', 'min'])
+      for (const a of ['x', 'y'])
+        res[a][f] = Math[f](res[a][f], p[a])
+  return res
 }
 
 const lss = (id, size = defaultSize) => {
@@ -238,46 +223,42 @@ const lss = (id, size = defaultSize) => {
   transform(zoom, 0, 0, zoom, (size - zoom * (x.max + x.min)) / 2, (size - zoom * (y.max + y.min)) / 2)
   polygon(points.map(({x, y}) => [x, y]), 1/zoom)
 
-  return { src: url(), title: JSON.stringify({}) }
+  return { src: url(), title: fractals[id].name }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const getJulia = c => (z, max) => {
-  let [i, [a, b], r2, t] = [0, z, Math.pow(2, 6)]
-  while (true) {
-    if (++i > max) return Infinity
-    if ((t = a * a + b * b) > r2) return Math.max(0, i - Math.log(t) / Math.log(r2))
-    ;[a, b] = [a * a - b * b + c[0], 2 * a * b + c[1]]
+const julia = c => c ? (z, max) => {
+  let [i, [a, b], r2, t] = [0, z, 2 ** 6]
+  while (++i < max) {
+    [a, b] = [a * a - b * b + c[0], 2 * a * b + c[1]]
+    if ((t = a * a + b * b) > r2) return i - Math.log(t) / Math.log(r2)
   }
-}
-const mandelbrot = (z, max) => getJulia(z)(z, max)
+} : (z, max) => julia(z)(z, max)
 
-const getDef = (id, size) => {
-  const zs = [!1,[0.287,-0.01],[0.159,0.571],[-0.66,0.334],[-0.82,0.176],[0.329,0.470]]
-  return { a: id ? 0 : -0.66, b: 0, zoom: 3.3 / size, i: 50, gen: id ? getJulia(zs[id]) : mandelbrot }
+const getDef = id => {
+  const zs = [0,[0.287,-0.01],[0.159,0.571],[-0.66,0.334],[-0.82,0.176],[0.329,0.470]]
+  return { a: id ? 0 : -0.66, b: 0, zoom: .3, i: 50, z: zs[id] }
 }
 
-const mnd = (def, size = defaultSize) => {
-  if (typeof def === 'number') def = getDef(def, size)
+const mnd = (o, size = defaultSize) => {
+  if (typeof o === 'number') o = getDef(o)
+  o.gen = julia(o.z)
 
   const { dot, url } = Matrix(size)
 
-  const getColor = i => isFinite(i) ? 128 + 128 * Math.sin(i) : 0
-  const pixelLocation = (x, y) => [(x - size/2) * def.zoom + def.a, (y - size/2) * def.zoom + def.b]
-
   for (let y = 0; y < size; ++y) {
     for (let x = 0; x < size; ++x) {
-      dot(x, y, getColor(def.gen(pixelLocation(x, y), def.i)))
+      dot(x, y, 128 + 128 * Math.sin(o.gen([(x/size - 1/2) / o.zoom + o.a, (y/size - 1/2) / o.zoom + o.b], o.i)))
     }
   }
 
-  return { src: url(), title: `?` }
+  return { src: url(), title: o.z ? `Julia ${o.z}` : `Mandelbrot` }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const externalize = { eca, mr2, mr3, mr4, lor, cvg, cst, lss, mnd }
+const externalize = { eca, mr2, mr3, mr4, mr5, lor, cvg, cst, lss, mnd }
 
 const wrap = f => (...a) => {
   const [t0, r, t1] = [Date.now(), f(...a), Date.now()]
