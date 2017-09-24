@@ -67,12 +67,14 @@ eca.range = [0, 2**8]
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const mr4_pattern = i => [i & 0xf, i >> 4].map(n => [1,2,4,8].map(d => +!!(d & n)))
+const mrx_patterns = S => i => [i & 2**(S**2)-1, i >> (S**2)].map(n => [...Array((S**2)).keys()].map(d => +!!(2**d & n)))
+const reverse = pattern => parseInt(pattern.toString().replace(/,/g,''),2)
 
 const mrx = (S, pattern, size = defaultSize, block = 2**2) => {
   const { rect, url } = Canvas(size)
 
-  if (typeof pattern === 'number') pattern = mr4_pattern(pattern)
+  if (typeof pattern === 'number') pattern = mrx_patterns(S)(pattern)
+  else console.log(reverse(pattern))
 
   const square = (x, y, s, color) => {
     if (s > block)
@@ -86,8 +88,9 @@ const mrx = (S, pattern, size = defaultSize, block = 2**2) => {
   return { src: url(), title: JSON.stringify(pattern) }
 }
 
-const mr9 = mrx.bind(null, 3)
-const mr4 = mrx.bind(null, 2)
+const mr4 = mrx.bind(null, 4)
+const mr3 = mrx.bind(null, 3)
+const mr2 = mrx.bind(null, 2)
 
 mr4.range = [0, 2**8]
 
@@ -274,7 +277,7 @@ const mnd = (def, size = defaultSize) => {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const externalize = { eca, mr4, lor, cvg, cst, mr9, lss, mnd }
+const externalize = { eca, mr2, mr3, mr4, lor, cvg, cst, lss, mnd }
 
 const wrap = f => (...a) => {
   const [t0, r, t1] = [Date.now(), f(...a), Date.now()]
