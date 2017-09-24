@@ -7,7 +7,8 @@
 <meta name='robots'    content='noarchive, nosnippet' />
 <meta name='description' content="???" />
 <style>
-img { border: grey 1px solid; margin: 5px; image-rendering: pixelated; }
+body { font-size: 0; }
+img { margin: 0px; image-rendering: pixelated; }
 </style>
 </head>
 <body>
@@ -19,17 +20,39 @@ const t0 = Date.now()
 
 const image = (cb, ...rest) => document.body.appendChild(Object.assign(new Image, cb(...rest)))
 const br = _ => document.body.appendChild(document.createElement('br'))
-const add = (list, cb) => (br(), list.forEach(cb))
 
-add([29, 86, 126, 145, 165, 182], i => image(eca, i))
-add([841390220, 107020255, 3515601291, 519981995, 774893103, 1517752098], i => image(mr4, i))
-add([0, 1, 2, 3, 4, 5], i => image(lss, i))
-add([233130, 233106, 43281, 74808, 8687, 82572], i => image(mr3, i))
-add([0, 1, 2, 5, 10, 21], i => image(cst, { seed: 1, iterations: i, fill: i > 10 }) )
-add([105, 113, 197, 200, 228, 248], i => image(mr2, i))
-add([0, 1, 2, 3, 4, 5], i => image(mnd, i))
-add([1, 2, 3, 4, 5, 6], i => image(cvg, i))
-add([0, 1, 2, 3, 4, 5], i => image(lor, i))
+;[29, 86, 126, 145, 165, 182].forEach(i => image(eca, {i}))
+;[841390220, 107020255, 3515601291, 519981995, 774893103, 1517752098].forEach(i => image(mr4, {i}))
+;[0, 1, 2, 3, 4, 5].forEach(id => image(lss, {id}))
+;[233130, 233106, 43281, 74808, 8687, 82572].forEach(i => image(mr3, {i}))
+;[2, 3, 6, 36].forEach(p =>
+  [0, 1, 2, 5, 10, 21].forEach(iter => image(cst, { seed: 1, iter, fill: iter > 10, p }) )
+)
+;[105, 113, 197, 200, 228, 248].forEach(i => image(mr2, {i}))
+;[0, 1, 2, 3, 4, 5].forEach(id => image(mnd, {id}))
+;[1, 2, 3, 4, 5, 6].forEach(seed => image(cvg, {seed}))
+;[...Array(20).keys()].forEach(angle => image(lor, {angle}))
+
+const a = [1,1,1,1,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,1,1,1,1]
+;[[a,a.map(v=>1-v)]].forEach(pattern => image(mr5, {pattern, size: 125, block: 1}))
+;[['Shell', 4, 'ftftftft', { f: '+f-ff-f+' }]].forEach(fractal => image(lss, {fractal}))
+;[{ a: 0, b: 0, zoom: .3, i: 50, z: [.86,.86] }].forEach(def => image(mnd, {def}))
+
+
+br()
+
+const s = 40
+const range = [...Array(s+1).keys()].map(v => 1.3*(2*v/s - 1))
+for (const a of range) {
+  for (const b of range) {
+    image(mnd, { size: 32, def: { a: 0, b: 0, zoom: 5, i: 15, z: [b-0.7, a] } })
+  }
+  br()
+}
+
+
+
+
 
 
 document.title = Date.now() - t0

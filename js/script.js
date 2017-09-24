@@ -4,7 +4,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const defaultSize = 256
+const defaultSize = 128
 
 const Element = size => {
   const canvas = document.createElement('canvas')
@@ -46,21 +46,20 @@ const RandomFloat = seed => (r => _ => r() / 2147483647)(Random(seed))
 
 const eca_pattern = i => (2**8 + i).toString(2).slice(1).split('').map(v => +v)
 
-const eca = (id, size = defaultSize) => {
-  const pattern = eca_pattern(id)
+const eca = ({ i = 0, size = defaultSize, level = 0, pattern = eca_pattern(i) }) => {
   const { dot, url } = Matrix(size)
   const init_row = [...Array(size).keys()].map(RandomBool(1))
 
   for (let r = 0, row = init_row; r < size; r++) {
     const nextRow = []
     for (let i = 0; i < size; i++) {
-      if (!row[i]) dot(i, r)
+      if (!row[i]) dot(i, r, level)
       nextRow[i] = pattern[4 * row[(i - 1 + size) % size] + 2 * row[i] + row[(i + 1) % size]]
     }
     row = nextRow
   }
 
-  return { src: url(), title: id + ': ' + JSON.stringify(pattern) }
+  return { src: url(), title: i + ': ' + JSON.stringify(pattern) }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,8 +67,7 @@ const eca = (id, size = defaultSize) => {
 const mrx_patterns = S => i => [i & 2**(S**2)-1, i >> (S**2)].map(n => [...Array((S**2)).keys()].map(d => +!!(2**d & n)))
 const reverse = pattern => parseInt(pattern.reverse().toString().replace(/,/g,''),2)
 
-const mrx = S => (pattern, size = defaultSize, block = 2**2) => {
-  if (typeof pattern === 'number') pattern = mrx_patterns(S)(pattern)
+const mrx = S => ({ i = 0, size = defaultSize, pattern = mrx_patterns(S)(i), block = 2**2 }) => {
   const { rect, url } = Canvas(size)
   const range = [...Array(S).keys()]
 
@@ -101,25 +99,26 @@ const Lorentz = (m = 0) => {
   }
 }
 
-const lor = (id, size = defaultSize, block = 2**2) => {
+const lor = ({ angle, size = defaultSize }) => {
   const { dot, url } = Matrix(size)
-  const iterate = Lorentz(id / 1000)
+  const iterate = Lorentz(2 / 1000)
   const trans = v => size * (v / 66 + 0.5)
   const xya = (x, y, a) => x * Math.sin(a) + y * Math.cos(a)
 
   for (let i=0; i < 20000; i++) {
     const {x, y, z} = iterate(0.0012)
-    dot(trans(xya(x, y, id / 5 * Math.PI / 2)), trans(z - 25))
+    dot(trans(xya(x, y, angle / 5 * Math.PI / 2)), trans(z - 25))
   }
 
-  return { src: url(), title: `alpha = ${id / 10} * PI` }
+  return { src: url(), title: `alpha = ${angle / 10} * PI` }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const cvg = (id, s = defaultSize) => {
-  const random = RandomBool(id)
+const cvg = ({ seed = 1, size = defaultSize, level = 0 }) => {
+  const random = RandomBool(seed)
   const a = []
+  const s = size
   for (let x = 0; x < s; x++) for (let y = (a[x] = [], 0); y < s; y++) a[x][y] = random()
 
   for (let _ = 0; _ < 5; _++) {
@@ -142,24 +141,23 @@ const cvg = (id, s = defaultSize) => {
   const { dot, url } = Matrix(s)
   for (let x = 0; x < s; x++) {
     for (let y = 0; y < s; y++) {
-      if (a[x][y]) dot(x, y)
+      if (a[x][y]) dot(x, y, level)
     }
   }
 
-  return { src: url(), title: `Cave id #${id}` }
+  return { src: url(), title: `Cave seed #${seed}` }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const cst = (o, size = defaultSize, block = 2**2) => {
-  const p = 4
+const cst = ({ seed = 1, p = 4, size = defaultSize, iter, fill = false }) => {
   const zoom = .4 * size
-  const random = RandomFloat(o.seed)
+  const random = RandomFloat(seed)
   const cis = (r, a) => [r * Math.cos(a), r * Math.sin(a)]
 
   let points = [...Array(p).keys()].map(n => n/p*2*Math.PI).map(a => ([Math.sin(a), Math.cos(a)]))
 
-  for (let _ = 0; _ < o.iterations; _++) {
+  for (let _ = 0; _ < iter; _++) {
     let temp = []
     for (let i = 0; i < points.length; i++) {
       const a = points[i]
@@ -175,9 +173,9 @@ const cst = (o, size = defaultSize, block = 2**2) => {
 
   const { transform, polygon, url } = Canvas(size)
   transform(zoom, 0, 0, zoom, size / 2, size / 2)
-  polygon(points, 1/zoom, 1, o.fill)
+  polygon(points, 1/zoom, 1, fill)
 
-  return { src: url(), title: JSON.stringify(o) }
+  return { src: url(), title: JSON.stringify({seed, iter}) }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -189,10 +187,12 @@ const fractals = [
   ['Dragon 1',   4, 'x',      { x: 'x+yf', y: 'fx-y' }],
   ['Dragon 2',   8, '+a',     { a: 'a+f+b', b: 'a-f-b'}],
   ['Shell',      4, 'f',      { f: '-f+ff+f-'}]
-].map(([name, a, start, dict, path = start]) => {
+]
+
+const initialize = ([name, a, start, dict, path = start]) => {
   while (path.length < 2000) path = path.replace(/./g, c => dict[c] || c)
   return { name, path: path.replace(/[AB]/g, ''), angle: Math.PI * 2 / a, tAngle: Math.PI * 4 / start.length }
-})
+}
 
 const generatePoints = ({ path, angle, tAngle }) => {
   let [dir, p] = [0, { x: 0, y: 0 }]
@@ -214,8 +214,8 @@ const getBoundingBox = points => {
   return res
 }
 
-const lss = (id, size = defaultSize) => {
-  let points = generatePoints(fractals[id])
+const lss = ({id = 2, size = defaultSize, fractal = fractals[id] }) => {
+  let points = generatePoints(initialize(fractal))
   const { x, y } = getBoundingBox(points)
   const zoom = size / Math.max(x.max - x.min, y.max - y.min) * 0.95
 
@@ -223,7 +223,7 @@ const lss = (id, size = defaultSize) => {
   transform(zoom, 0, 0, zoom, (size - zoom * (x.max + x.min)) / 2, (size - zoom * (y.max + y.min)) / 2)
   polygon(points.map(({x, y}) => [x, y]), 1/zoom)
 
-  return { src: url(), title: fractals[id].name }
+  return { src: url(), title: fractal.name }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -241,8 +241,8 @@ const getDef = id => {
   return { a: id ? 0 : -0.66, b: 0, zoom: .3, i: 50, z: zs[id] }
 }
 
-const mnd = (o, size = defaultSize) => {
-  if (typeof o === 'number') o = getDef(o)
+const mnd = ({id = 1, size = defaultSize, def = getDef(id) }) => {
+  const o = def
   o.gen = julia(o.z)
 
   const { dot, url } = Matrix(size)
