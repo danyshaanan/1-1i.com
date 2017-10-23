@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Random fractalic coast lines | 1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='googlebot' content='noarchive', 'nosnippet'>
+<meta name='robots'    content='noarchive', 'nosnippet'>
+<meta name='description' content='Graphical rendering of mathematical models in python' />
+<meta name='keywords' content='dany shaanan, math, python, rendering, python PIL, mathematics, code' />
+<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+<link href='/css/style.css' rel='stylesheet' type='text/css'>
+<style>
+
+</style>
+<!-- <script type='text/javascript' src='js/jquery-1.6.2.min.js'></script> -->
+<!-- <script type='text/javascript'></script> -->
+</head>
+
+<body>
+
+<header>
+  <h6><a class='back' href='/'>&lt;&lt; Go Back</a></h6>
+  <h1>Random fractalic coast lines</h1>
+  <h3>Rendered in Python, explained in English</h3>
+  <h5>By <a href='//danyshaanan.com'>Dany Shaanan</a></h5>
+</header>
+
+<section>
+<h4></h4>
+Coast lines are a good example of the emergence of fractal-like shapes in nature, and a good exercise in generating natural-looking objects.
+<br /><br />
+To simulate a coast line, we start with a simple closed loop of segments, like a square!
+Then we go through an iterative process of randomly breaking each segment into two smaller ones:
+A point is chosen at random near by the center of the segment,
+and the segment is replaced with the two segments that connect the original end points, through the new middle point.
+Each of the new segments goes through the same process, until the segments' lengths are small enough for our taste.
+Here, it would be when the length is of just a couple of pixels, and the iterative process becomes meaningless.
+<br /><br />
+On the left we see the segments of each iteration in gray, and the final result in black.
+On the right we see the filled in area, which looks very 'natural'.
+
+<br /><br />
+<a href='coast_lines.py.txt'>See the code here</a><br />
+<br /><br />
+
+<img src='output/coast_line_2_0_0.png' /><img src='output/coast_line_2_0_1.png' /><br />
+<img src='output/coast_line_2_1_0.png' /><img src='output/coast_line_2_1_1.png' /><br />
+<img src='output/coast_line_2_2_0.png' /><img src='output/coast_line_2_2_1.png' /><br />
+<img src='output/coast_line_3_0_0.png' /><img src='output/coast_line_3_0_1.png' /><br />
+<img src='output/coast_line_3_1_0.png' /><img src='output/coast_line_3_1_1.png' /><br />
+<img src='output/coast_line_3_2_0.png' /><img src='output/coast_line_3_2_1.png' /><br />
+<img src='output/coast_line_4_0_0.png' /><img src='output/coast_line_4_0_1.png' /><br />
+<img src='output/coast_line_4_1_0.png' /><img src='output/coast_line_4_1_1.png' /><br />
+<img src='output/coast_line_4_2_0.png' /><img src='output/coast_line_4_2_1.png' /><br />
+
+
+</section>
+
+<footer>
+</footer>
+
+<script src='../../js/script.js'></script>
+<script>
+// document.body.style.setProperty('background', `url(${cst({seed:1,iterations:4}, 128).src})`)
+</script>
+
+<script type='text/javascript'>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>

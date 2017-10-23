@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>Mandelbrot and Julia | 1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='googlebot' content='noarchive', 'nosnippet'>
+<meta name='robots'    content='noarchive', 'nosnippet'>
+<meta name='description' content='Graphical rendering of mathematical models in python' />
+<meta name='keywords' content='dany shaanan, math, python, rendering, python PIL, mathematics, code' />
+<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+<link href='/css/style.css' rel='stylesheet' type='text/css'>
+<style>
+</style>
+<!-- <script type='text/javascript' src='js/jquery-1.6.2.min.js'></script> -->
+<!-- <script type='text/javascript'></script> -->
+</head>
+
+<body>
+
+<header>
+  <h6><a class='back' href='/'>&lt;&lt; Go Back</a></h6>
+  <h1>Mandelbrot and Julia</h1>
+  <h3>Rendered in Python, explained in English</h3>
+  <h5>By <a href='//danyshaanan.com'>Dany Shaanan</a></h5>
+</header>
+
+<section>
+<h4>Julia</h4>
+For each point in the complex plane there is a Julia set.
+(But there are also many others! The ones here are called 'Complex quadratic polynomial' Julia sets).
+The Julia set for point z0, is all points z in the complex plane,
+that when iterated throught f(z) = z*z + z0,
+stay bounded.
+<br /><br />
+Below is a matrix of Julia sets in the range of -1 &lt;= a,b &lt;= 1, where a+bi = z0.
+<br /><br />
+
+<a href='julia.py.txt'>See the code here</a>
+<br /><br />
+
+
+<img src='output/julia.png' />
+
+
+<br /><br /><br />
+
+<h4>Mandelbrot</h4>
+The Mandelbrot set is a varient of Julia;
+instead of having one z0 for the whole set,
+every point is calculated with its own original location as z0.
+
+<br /><br />
+<a href='mandelbrot.py.txt'>See the code here</a>
+<br /><br />
+
+<img src='output/mandelbrot.png' />
+
+<br /><br />
+<br /><br />
+
+By rendering a lot of images, and compiling them into a gif, I've created this tiny version of a zoom-in animation into mandelbrot:
+(But I'm afraid I've lost the script)
+<br /><br />
+<div style='text-align: center;'>
+  <img src='motion/zoommovie_10.gif' />
+</div>
+
+<br /><br />
+<br /><br />
+
+The small Mandelbrot thumbnail at the end of every page in this site, is rendered using <a href='../../img/thumdelbrot.py.txt'>this script</a>.
+
+</section>
+
+<footer>
+</footer>
+
+<script type='text/javascript'>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>

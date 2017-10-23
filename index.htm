@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>1-1i</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<meta name='googlebot' content='noarchive', 'nosnippet'>
+<meta name='robots'    content='noarchive', 'nosnippet'>
+<meta name='description' content='Graphical rendering of mathematical models in python' />
+<meta name='keywords' content='dany shaanan, math, javascript, rendering, canvas, mathematics, code' />
+<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+<link href='./css/style.css' rel='stylesheet' type='text/css'>
+<style>
+section#menu a.page { text-decoration: none !important; color: #000 !important; padding-bottom: 40px; }
+section { margin-bottom: 5em; }
+img { margin: 5px; background-color: white; }
+body { image-rendering: pixelated; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Visual mathematics</h1>
+  <h3>JavaScript on Canvas</h3>
+  <h5>By <a href='//danyshaanan.com'>Dany Shaanan</a></h5><br />
+  <h5>This is a rewrite of an older <a href='./python/'>Python version</a> of the site.</h5>
+</header>
+
+<section id='menu'>
+  <h3>What is this about?</h3>
+  All images in this site
+  (outside of the old <a href='./python/'>Python version</a>)
+  are rendered in runtime in JavaScript on Canvas.
+  Click any groups of images in this page to read a bit about them
+  and play around in an interactive version.
+  <br /><br /><hr />
+
+  <a class='page' id='cst' href='renderings/coast_lines'></a>
+  <a class='page' id='mnd' href='renderings/mandelbrot_and_julia'></a>
+  <a class='page' id='cvg' href='renderings/cave_generation'></a>
+  <a class='page' id='eca' href='renderings/elementary_cellular_automaton'></a>
+  <a class='page' id='lor' href='renderings/lorenz_attractor'></a>
+  <a class='page' id='lss' href='renderings/lindenmayer_system'></a>
+  <a class='page' id='mr'  href=''></a>
+</section>
+
+<section>
+<h4>Links</h4>
+  <ul>
+    <li><a href='https://npmjs.org/package/cli-mandelbrot'>cli-mandelbrot, a Nodejs command line viewer of the Mandelbrot set</a></li>
+    <li><a href='https://github.com/danyshaanan/mandelbrot'>mandelbrot@github - Renderings of the Mandelbrot set in various languages</a></li>
+    <li><a href='http://danyshaanan.com/playground/tree'>Interactive fractal tree. JavaScript on Canvas</a></li>
+    <li><a href='http://danyshaanan.com/playground/l-systems'>Interactive L-Systems.  JavaScript on Canvas</a></li>
+  </ul>
+</section>
+
+<footer>
+</footer>
+
+<a href='https://github.com/danyshaanan/1-1i.com'><img style='position: absolute; top: 0; right: 0; border: 0;' src='./img/forkme_right_darkblue_121621.png' alt='Fork me on GitHub'></a>
+
+<script src='./js/script.js'></script>
+<script>
+
+const t0 = Date.now()
+
+const image = (id, cb, ...rest) => document.querySelector('#'+id).appendChild(Object.assign(new Image, cb(...rest)))
+
+const size = 256/2
+
+;[1, 5, 21].forEach(i => image('cst', cst, { size, seed: 1, iter: i, fill: i > 10 }))
+;[0, 1, 4].forEach(id => image('mnd', mnd, { size, id }))
+;[1, 2, 3].forEach(seed => image('cvg', cvg, { size, seed }))
+;[86, 126, 182].forEach(i => image('eca', eca, { size, i }))
+;[0, 2, 4].forEach(angle => image('lor', lor, { size, angle }))
+;[0, 2, 5].forEach(id => image('lss', lss, { size, id }))
+;[3515601291, 519981995, 1517752098].forEach(i => image('mr', mr4, { size, i }))
+;[233106, 43281, 82572].forEach(i => image('mr', mr3, { size, i }))
+;[113, 200, 248].forEach(i => image('mr', mr2, { size, i }))
+
+// document.body.style.setProperty('background', `url(${lss({id:2,size:128,level:200}).src}) center`)
+// document.body.style.setProperty('background-size', `2048px`)
+
+document.title = Date.now() - t0
+</script>
+
+<script type='text/javascript'>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38734863-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>
