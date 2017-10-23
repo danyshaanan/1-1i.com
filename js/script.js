@@ -231,6 +231,7 @@ const lss = ({id = 2, size = defaultSize, fractal = fractals[id] }) => {
 const julia = c => c ? (z, max) => {
   let [i, [a, b], r2, t] = [0, z, 2 ** 6]
   while (++i < max) {
+    // ;[a, b] = [a, b].map(v => Math.abs(v))
     [a, b] = [a * a - b * b + c[0], 2 * a * b + c[1]]
     if ((t = a * a + b * b) > r2) return i - Math.log(t) / Math.log(r2)
   }
