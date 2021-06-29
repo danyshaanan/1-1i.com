@@ -1,38 +1,19 @@
 #!/usr/bin/python
 import PIL.Image, random
 
-rnd = random.Random()
+area = [-1, 0, 1]
+neighbours = [(i, j) for i in area for j in area if i or j]
 
-size = 100
-iterations = 100000
-white = 255
-black = 0
-
-def valueFor(x, y):
-  c = 0
-  for i in [-1,0,1]:
-    for j in [-1,0,1]:
-      if pixel[x+i,y+j] == black:
-        c += 1
-  return c
-
-def iterate():
-  x, y = rnd.randrange(1,size-2), rnd.randrange(1,size-2)
-  if valueFor(x, y) in rule:
-    pixel[x,y] = black
-
-
-for i in range(2**7, 2**9): # 10000000 to 111111111
-  rnd.seed(0)
-  rule = [d for d in range(9) if (i>>(8-d))%2]
-
-  image = PIL.Image.new('L',(size,size), white)
+for i in range(2 ** 7, 2 ** 9):
+  rr = random.Random(0).randrange
+  rule = [str(i) if int(c) else 'x' for i, c in enumerate(format(i, '09b'))]
+  image = PIL.Image.new('1',(100, 100), 1)
   pixel = image.load()
-  pixel[size/2, size/2] = black
+  pixel[image.width // 2, image.height // 2] = 0
 
-  for _ in range(iterations):
-    iterate()
+  for _ in range(100_000):
+    x, y = rr(1, image.width - 2), rr(1, image.height - 2)
+    if rule[[pixel[x + i, y + j] for i, j in neighbours].count(0)] != 'x':
+      pixel[x, y] = 0
 
-  filename = ''.join([d in rule and str(d) or 'x' for d in range(9)]) + '.png'
-  image.resize((size*4,size*4)).save(filename)
-  print filename
+  image.resize((4 * image.width, 4 * image.height)).save('output/' + ''.join(rule) + '.png')
