@@ -27,5 +27,5 @@ for s in [900, 450, 300, 100]:
         contI = i - math.log(abs(z), radius)
         pixel[pb, pa] = createRGBA(127 + 128 * math.cos(contI / maxIterations * math.pi))
 
-  image.save(f'thumdelbrot_{str(s).rjust(5, "0")}px.png')
+  image.save(f'output/thumdelbrot_{str(s).rjust(5, "0")}px.png')
 

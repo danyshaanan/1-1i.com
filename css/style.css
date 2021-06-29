@@ -9,4 +9,4 @@ a.back       { color: #aaa !important; }
 pre           { font-size: 12px; }
 a:link,a:visited,a:active { color: #444; text-decoration: underline; }
 a:hover                   { color: #444; text-decoration: none; }
-footer            { margin: auto; margin-bottom: 2em; margin-top: 8em; width: 100px; height: 100px; background-image: url('/img/thumdelbrot_00100px.png'); }
+footer            { margin: auto; margin-bottom: 2em; margin-top: 8em; width: 100px; height: 100px; background-image: url('/renderings/mandelbrot_and_julia/output/thumdelbrot_00100px.png'); }
