@@ -16,4 +16,4 @@ for i in range(2 ** 7, 2 ** 9):
     if rule[[pixel[x + i, y + j] for i, j in neighbours].count(0)] != 'x':
       pixel[x, y] = 0
 
-  image.resize((4 * image.width, 4 * image.height)).save('output/' + ''.join(rule) + '.png')
+  image.resize((4 * image.width, 4 * image.height)).save(f'output/{"".join(rule)}.png')

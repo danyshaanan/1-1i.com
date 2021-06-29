@@ -13,7 +13,7 @@ for gon in [2, 3, 4]:
   for seed in range(3):
     rnd.seed(seed)
     lines = [(points[i], points[(i + 1) % gon]) for i in range(gon)]
-    im = Image.new("L", (x, y), 255)
+    im = Image.new('L', (x, y), 255)
     draw = ImageDraw.Draw(im)
 
     for i in range(iterations):
@@ -30,7 +30,7 @@ for gon in [2, 3, 4]:
     for l in lines: draw.line((l[0], l[1]), fill=0)
     im.save(f'output/coast_line_{gon}_{seed}_0.png')
 
-    im = Image.new("L", (x,y), 255)
+    im = Image.new('L', (x,y), 255)
     ImageDraw.Draw(im).polygon([l[0] for l in lines], fill=0)
     im.save(f'output/coast_line_{gon}_{seed}_1.png')
 

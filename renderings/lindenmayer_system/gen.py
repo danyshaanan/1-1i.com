@@ -57,5 +57,5 @@ fractals = [
 
 for fractal in fractals:
   image = drawFractal(fractal)
-  image.save('output/' + fractal['name'] + '.png')
+  image.save(f'output/{fractal["name"]}.png')
 

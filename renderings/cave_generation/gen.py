@@ -20,7 +20,7 @@ for shot in [0] + [2 ** i for i in range(10, 21)]:
     if alive > 4: pixel[x, y] = 1
     if alive < 4: pixel[x, y] = 0
     i += 1
-  image.save('output/cave_1' + str(shot).rjust(9, '0') + '.png')
+  image.save(f'output/cave_1{str(shot).rjust(9, "0")}.png')
 image.resize((4 * image.width, 4 * image.height)).save('output/cave_final_big.png')
 
 # the code above generates a set of still images,
