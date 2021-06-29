@@ -1,34 +1,25 @@
 #!/usr/bin/python
 import PIL.Image, random
 
+area = [-1, 0, 1]
+neighbours = [(i, j) for i in area for j in area if i or j]
 
-size = 200
-light = 255
-dark = 230
-colorBalance = 0.508
-area = [-2,-1,0,1,2]
-iterations = 500000
-
-neighbours = [(i,j) for i in area for j in area if i!=0 or j!=0]
-neighboursCount = len(neighbours)
-rnd = random.Random()
-rnd.seed(0)
-image = PIL.Image.new('L',(size,size), light)
+rnd = random.Random(0)
+image = PIL.Image.new('L',(200 ,200))
 pixel = image.load()
 
-for x in range(size):
-  for y in range(size):
-    pixel[x,y] = rnd.random() < colorBalance and light or dark
+for c in range(image.width):
+  for r in range(image.height):
+    pixel[c, r] = int(rnd.random() < 0.5)
 
-for i in range(iterations):
-  x = rnd.randrange(size)
-  y = rnd.randrange(size)
-  currentColor = pixel[x,y]
-  darkNeighbours = sum(pixel[(x+i)%size,(y+j)%size] == dark for (i,j) in neighbours)
-  lightNeighbours = neighboursCount - darkNeighbours
-  if darkNeighbours > lightNeighbours:
-    pixel[x,y] = dark
-  elif lightNeighbours > darkNeighbours:
-    pixel[x,y] = light
+for _ in range(500_000):
+  x, y = rnd.randrange(image.width), rnd.randrange(image.height)
+  alive = sum(pixel[(x + i) % image.width, (y + j) % image.height] for (i, j) in neighbours)
+  if alive > 4: pixel[x, y] = 1
+  if alive < 4: pixel[x, y] = 0
+
+for c in range(image.width):
+  for r in range(image.height):
+    pixel[c, r] = 240 if pixel[c, r] else 255
 
 image.save('cave_background.png')

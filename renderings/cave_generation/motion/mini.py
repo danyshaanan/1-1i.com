@@ -44,4 +44,4 @@ for i in range(iterations):
 
   filename = 'mini_' + str(1000000000+i) + '.png'
   image.resize((size*4,size*4)).save(filename)
-  print filename
+  print(filename)

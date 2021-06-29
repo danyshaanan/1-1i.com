@@ -38,7 +38,7 @@ for i in range(iterations):
 
   filename = 'long_' + str(1000000000+i) + '.png'
   image.resize((size*4,size*4)).save(filename)
-  print filename
+  print(filename)
 
   for x in range(size):
     for y in range(size):
